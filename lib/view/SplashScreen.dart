@@ -31,8 +31,8 @@ class _SplashScreenState extends State<SplashScreen> {
           "HelpDesk",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

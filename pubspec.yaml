@@ -32,6 +32,8 @@ dependencies:
   validadores: ^1.0.2
   json_annotation: ^3.1.1
   dio: ^3.0.10
+  brasil_fields: 1.1.1
+  retrofit: ^1.3.4+1
 
 
 dev_dependencies:
@@ -39,6 +41,7 @@ dev_dependencies:
     sdk: flutter
   json_serializable: ^3.5.1
   build_runner: ^1.10.1
+  retrofit_generator: ^1.4.1+2
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -51,8 +54,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - imagens/avatar.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

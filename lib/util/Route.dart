@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:helpdesk/view/Cadastro.dart';
-import 'package:helpdesk/view/Home.dart';
+import 'package:helpdesk/view/HomeCliente.dart';
+import 'package:helpdesk/view/HomeTecnico.dart';
 import 'package:helpdesk/view/Login.dart';
 
 class RouteGen {
-  // ignore: missing_return
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    //final args = settings.arguments;
+    final args = settings.arguments;
     switch (settings.name) {
       case "/login":
         return MaterialPageRoute(builder: (context) => Login());
@@ -14,9 +14,12 @@ class RouteGen {
       case "/cadastro":
         return MaterialPageRoute(builder: (context) => Cadastro());
         break;
-      case "/home":
-        return MaterialPageRoute(builder: (context) => Home());
+      case "/homecliente":
+        return MaterialPageRoute(builder: (context) => HomeCliente(args));
         break;
+      case "/hometecnico":
+        return MaterialPageRoute(builder: (context) => HomeTecnico(args));
+        break;  
     }
   }
 }

@@ -12,6 +12,7 @@ void main() {
     home: SplashScreen(),
     onGenerateRoute: RouteGen.generateRoute,
     theme: themeData,
+    debugShowCheckedModeBanner: false,
   ));
 }
 
