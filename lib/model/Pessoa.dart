@@ -39,6 +39,15 @@ class Pessoa {
     };
   }
 
+   Map<String, dynamic> toMapLogin() {
+    return {
+      'email': email,
+      'senha': senha
+    };
+  }
+
+  String toJsonLogin() => json.encode(toMapLogin());
+
   factory Pessoa.fromMap(Map<String, dynamic> map) {
     return Pessoa(
       idPessoa: map['idPessoa'],

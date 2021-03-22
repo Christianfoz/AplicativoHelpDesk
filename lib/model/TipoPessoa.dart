@@ -36,8 +36,7 @@ class TipoPessoa {
     return TipoPessoa(
       idTipoPessoa: map['idTipoPessoa'],
       nomeTipoPessoa: map['nomeTipoPessoa'],
-      pessoas: List<Pessoa>.from(map['pessoas']?.map((x) => Pessoa.fromMap(x))),
-    );
+      pessoas: null);
   }
 
   String toJson() => json.encode(toMap());

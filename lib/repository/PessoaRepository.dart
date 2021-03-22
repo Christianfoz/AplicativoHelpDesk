@@ -28,8 +28,8 @@ class PessoaRepository {
 
     Future<Pessoa> logarPessoa(Pessoa p) async{
       var _dio = CustomDio().instance;
-      return await _dio.post("http://192.168.0.107:8080/pessoa/login",data: p.toJson())
-      .then((value) => value.data);
+      return await _dio.post("http://192.168.0.107:8080/pessoa/login",data: p.toJsonLogin())
+      .then((value) => Pessoa.fromMap(value.data));
     }
   }
 
