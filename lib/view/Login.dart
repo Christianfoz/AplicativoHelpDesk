@@ -15,8 +15,9 @@ class _LoginState extends State<Login> {
   
   _login() async{
     Pessoa p = await _repository.logarPessoa(_pessoa);
+    print("-------------" + p.tipoPessoa.nomeTipoPessoa);
     if(p.tipoPessoa.nomeTipoPessoa == "Cliente"){
-      Navigator.pushReplacementNamed(context, "/homecliente",arguments: p);
+      Navigator.pushNamedAndRemoveUntil(context, "/homecliente",(Route<dynamic> route) => false,arguments: p);
     }
     else if(p.tipoPessoa.nomeTipoPessoa == "Técnico"){
       Navigator.pushReplacementNamed(context, "/hometecnico",arguments: p);

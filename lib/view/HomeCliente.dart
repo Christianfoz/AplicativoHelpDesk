@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 
 class HomeCliente extends StatefulWidget {
@@ -6,13 +7,14 @@ class HomeCliente extends StatefulWidget {
   HomeCliente(this._pessoa);
   @override
   _HomeClienteState createState() => _HomeClienteState();
-  
 }
 
 class _HomeClienteState extends State<HomeCliente> {
-  int _indiceAtual = 0;
+  _abrirTelaChamado() {
+    Navigator.pushNamed(context, "/cadastrochamado", arguments: widget._pessoa);
+  }
 
-  _abrirTelaChamado(){
+  abrirPerfil(){
 
   }
 
@@ -23,45 +25,56 @@ class _HomeClienteState extends State<HomeCliente> {
         title: Text("Home"),
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Row(
-                children: [
-                   Padding(
-                     padding: EdgeInsets.all(1),
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage("http://192.168.0.107:8080/${widget._pessoa.foto}")),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 27,bottom: 13),
-                        child: Text(
-                          widget._pessoa.nome + " " + widget._pessoa.sobrenome,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      )
-                ],
-              )),
-              
-
-          ],
-        )
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: _abrirTelaChamado(),
-      ),
-      
-      body: Center(
-        child: Text(
-          "Cliente " + widget._pessoa.nome
+          child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          GestureDetector(
+            onTap: () => abrirPerfil(),
+            child: UserAccountsDrawerHeader(
+              accountEmail: Text(widget._pessoa.email),
+              accountName:
+                  Text(widget._pessoa.nome + " " + widget._pessoa.sobrenome),
+              currentAccountPicture: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(
+                      "http://192.168.0.107:8080/${widget._pessoa.foto}")),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.add,color: themeData.primaryColor),
+            title: Text(
+              "Cadastrar nova ordem",
+              style: TextStyle(color: themeData.primaryColor),
+            ),
+            onTap: () => Navigator.pop(context),
+          ),
+          ListTile(
+            leading: Icon(Icons.search,color: themeData.primaryColor,),
+            title: Text(
+              "Pesquisar ordens",
+              style: TextStyle(color: themeData.primaryColor),
+            ),
+            onTap: () => Navigator.pop(context),
+          ),
+          ListTile(
+            leading: Icon(Icons.person,color: themeData.primaryColor),
+            title: Text(
+              "Perfil",
+              style: TextStyle(color: themeData.primaryColor),
+            ),
+            onTap: () => Navigator.pop(context),
           )
+        ],
+      )),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: themeData.primaryColor,
+        onPressed: () => _abrirTelaChamado(),
       ),
+      body: Center(child: Text("Cliente " + widget._pessoa.nome)),
     );
   }
 }

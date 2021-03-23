@@ -28,8 +28,13 @@ class _CadastroState extends State<Cadastro> {
     else{
       _pessoa.tipoPessoa = TipoPessoa.alt(1,"Cliente");
     }
-    String url = await _repository.enviarFoto(_imagemSelecionada);
-    _pessoa.foto = url;
+    if(_imagemSelecionada == null){
+      _pessoa.foto = "sem-foto.png";
+    }
+    else{
+      String url = await _repository.enviarFoto(_imagemSelecionada);
+      _pessoa.foto = url;
+    }
     await _repository.inserirPessoa(_pessoa);
   }
 

@@ -3,7 +3,7 @@ import 'package:helpdesk/util/Route.dart';
 import 'package:helpdesk/view/SplashScreen.dart';
 
 final ThemeData themeData = ThemeData(
-    primaryColor: Colors.blue[750],
+    primaryColor: Color(0xff0088cc),
     accentColor: Colors.white,
   );
 
