@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:helpdesk/model/Bloco.dart';
 import 'package:helpdesk/model/Ordem.dart';
@@ -6,6 +7,8 @@ import 'package:helpdesk/model/Piso.dart';
 import 'package:helpdesk/model/Sala.dart';
 import 'package:helpdesk/model/Situacao.dart';
 import 'package:helpdesk/repository/BlocoRepository.dart';
+import 'package:helpdesk/repository/OrdemRepository.dart';
+import 'package:helpdesk/repository/PessoaRepository.dart';
 import 'package:helpdesk/repository/PisoRepository.dart';
 import 'package:helpdesk/repository/SalaRepository.dart';
 import 'dart:io';
@@ -27,9 +30,14 @@ class _CadastroChamadoState extends State<CadastroChamado> {
   final _blocoRepository = BlocoRepository();
   final _pisoRepository = PisoRepository();
   final _salaRepository = SalaRepository();
+  final PessoaRepository _repository = PessoaRepository();
+  final OrdemRepository _ordemRepository = OrdemRepository();
   List<Bloco> _blocos;
   List<Piso> _pisos;
   List<Sala> _salas;
+  Bloco _blocoEscolhido;
+  Piso _pisoEscolhido;
+  Sala _salaEscolhida;
   int _idBloco;
   int _idPiso;
 
@@ -56,10 +64,22 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     }
   }
 
-  _cadastrarOrdem() {
+  _cadastrarOrdem() async{
+    print("--------------" + _ordem.toMap().toString());
+    print(DateTime.now().toString());
     _ordem.cliente = widget._pessoa;
-    _ordem.dataInicio = DateTime.now();
+    _ordem.dataInicio = DateTime.now().toUtc();
     _ordem.situacao = Situacao.alt(1, "CRIADA");
+    _ordem.dataInicio = DateTime.now();
+    if(_imagemSelecionada == null){
+      _ordem.imagem = "sem-imagem.png";
+    }
+    else{
+      String url = await _repository.enviarFoto(_imagemSelecionada);
+      _ordem.imagem = url;
+    }
+    await _ordemRepository.criarOrdem(_ordem);
+
   }
 
   Future<List<Bloco>>_listarBlocos() async{
@@ -162,12 +182,15 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                   }
                                   else if(snapshot.hasData){
                                     return DropdownButtonFormField(
+                                      onSaved: (Bloco bloco) => _ordem.bloco = bloco,
                                       onChanged: (Bloco bloco) {
                                         setState(() {
                                           _idBloco = bloco.idBloco;
                                           _listarPisoPorBloco(_idBloco);
+                                          _blocoEscolhido = bloco;
                                         });
                                       },
+                                      value: _blocoEscolhido,
                                       validator: (value) {
                                         return Validador()
                                         .add(Validar.OBRIGATORIO,msg: "Campo Bloco é obrigatório")
@@ -219,12 +242,15 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                 case ConnectionState.done:
                                   if(snapshot.hasData){
                                     return DropdownButtonFormField(
+                                      onSaved: (Piso piso) => _ordem.piso = piso,
                                       onChanged: (Piso piso) {
                                         setState(() {
                                           _idPiso = piso.idPiso;
                                           _listarSalasPorPiso(_idPiso);
+                                          _pisoEscolhido = piso;
                                         });
                                       },
+                                      value: _pisoEscolhido,
                                       validator: (value) {
                                         return Validador()
                                         .add(Validar.OBRIGATORIO,msg: "Campo Piso é obrigatório")
@@ -283,9 +309,11 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                     return DropdownButtonFormField(
                                       onChanged: (Sala sala) {
                                         setState(() {
-                                          
+                                          _salaEscolhida = sala;
                                         });
                                       },
+                                      onSaved: (Sala sala) => _ordem.sala = sala,
+                                      value: _salaEscolhida,
                                       validator: (value) {
                                         return Validador()
                                         .add(Validar.OBRIGATORIO,msg: "Campo Sala é obrigatório")
