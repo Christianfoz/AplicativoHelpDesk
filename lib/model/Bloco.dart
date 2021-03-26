@@ -27,7 +27,7 @@ class Bloco {
     return Bloco(
       idBloco: map['idBloco'],
       nomeBloco: map['nomeBloco'],
-      pisos: List<Piso>.from(map['pisos']?.map((x) => Piso.fromMap(x))),
+      pisos: null,
     );
   }
 

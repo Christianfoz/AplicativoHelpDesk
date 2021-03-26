@@ -32,7 +32,7 @@ class Piso {
       idPiso: map['idPiso'],
       nomePiso: map['nomePiso'],
       bloco: Bloco.fromMap(map['bloco']),
-      salas: List<Sala>.from(map['salas']?.map((x) => Sala.fromMap(x))),
+      salas: null,
     );
   }
 

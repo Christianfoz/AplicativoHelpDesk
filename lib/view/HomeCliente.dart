@@ -46,7 +46,7 @@ class _HomeClienteState extends State<HomeCliente> {
               "Cadastrar nova ordem",
               style: TextStyle(color: themeData.primaryColor),
             ),
-            onTap: () => Navigator.pop(context),
+            onTap: () => _abrirTelaChamado(),
           ),
           ListTile(
             leading: Icon(Icons.search,color: themeData.primaryColor,),
