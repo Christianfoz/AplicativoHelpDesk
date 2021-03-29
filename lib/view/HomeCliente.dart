@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:helpdesk/main.dart';
+import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Pessoa.dart';
+import 'package:helpdesk/repository/OrdemRepository.dart';
 
 class HomeCliente extends StatefulWidget {
   Pessoa _pessoa;
@@ -10,12 +14,30 @@ class HomeCliente extends StatefulWidget {
 }
 
 class _HomeClienteState extends State<HomeCliente> {
+  final OrdemRepository _ordemRepository = OrdemRepository();
+  final _controller = StreamController<List<Ordem>>.broadcast();
+
+  Future<Stream<List<Ordem>>> _adicionarListener() async {
+    
+    Stream<List<Ordem>> stream =  Stream.fromFuture(_ordemRepository.listarOrdens());
+    stream.listen((event) {
+      _controller.add(event);
+    });
+  }
+
   _abrirTelaChamado() {
     Navigator.pushNamed(context, "/cadastrochamado", arguments: widget._pessoa);
   }
 
   abrirPerfil(){
 
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _adicionarListener();
   }
 
   @override
@@ -74,43 +96,38 @@ class _HomeClienteState extends State<HomeCliente> {
         backgroundColor: themeData.primaryColor,
         onPressed: () => _abrirTelaChamado(),
       ),
-      body: Center(child: Text("Cliente " + widget._pessoa.nome)),
-    );
+      body: StreamBuilder(
+        builder: (context, AsyncSnapshot<List<Ordem>> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:  
+              return CircularProgressIndicator();
+              break;
+            case ConnectionState.active:
+            case ConnectionState.done:
+              if(!snapshot.hasData){
+                return Center(
+                  child: Text(
+                    "Nenhuma ordem encontrada"
+                  ),
+                );
+              }
+              else{
+                return Expanded(
+                        child: ListWheelScrollView(
+                          children: [
+                            //popular com dados
+                          ],
+                          itemExtent: 42,
+                          useMagnifier: false,
+
+                        ) 
+                      );
+              }
+              break;
+          }
+        },
+        stream: _controller.stream),
+      );
   }
 }
-/*
-
-bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _indiceAtual,
-        onTap: (indice){
-          setState(() {
-            switch (indice) {
-              case 0:
-                
-                break;
-              case 1:
-
-                break;
-              case 2:
-                break;
-              default:
-            }
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: "Pesquisa",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Perfil",
-          ),
-        ],
-      ),
-
-      */

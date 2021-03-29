@@ -24,7 +24,7 @@ class Situacao {
     return {
       'idSituacao': idSituacao,
       'nomeSituacao': nomeSituacao,
-      'ordens': ordens?.map((x) => x.toMap())?.toList(),
+      'ordens': null,
     };
   }
 

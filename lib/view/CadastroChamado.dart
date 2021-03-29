@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:helpdesk/model/Bloco.dart';
 import 'package:helpdesk/model/Ordem.dart';
@@ -65,12 +64,12 @@ class _CadastroChamadoState extends State<CadastroChamado> {
   }
 
   _cadastrarOrdem() async{
-    print("--------------" + _ordem.toMap().toString());
     print(DateTime.now().toString());
     _ordem.cliente = widget._pessoa;
     _ordem.dataInicio = DateTime.now().toUtc();
     _ordem.situacao = Situacao.alt(1, "CRIADA");
     _ordem.dataInicio = DateTime.now();
+    print("--------------" + _ordem.toMap().toString());
     if(_imagemSelecionada == null){
       _ordem.imagem = "sem-imagem.png";
     }
@@ -126,7 +125,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                         decoration: InputDecoration(
                             hintText: "Titulo",
                             fillColor: Colors.white,
-                            icon: Icon(Icons.person)),
+                            icon: Icon(Icons.title,color: Colors.grey)),
                         onSaved: (String titulo) => _ordem.titulo = titulo,
                         validator: (titulo) {
                           return Validador()
@@ -141,7 +140,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                         decoration: InputDecoration(
                             hintText: "Descrição",
                             fillColor: Colors.white,
-                            icon: Icon(Icons.person)),
+                            icon: Icon(Icons.text_snippet,color: Colors.grey)),
                         onSaved: (String descricao) =>
                             _ordem.descricao = descricao,
                         validator: (descricao) {
@@ -181,7 +180,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                     return Text("Sem blocos");
                                   }
                                   else if(snapshot.hasData){
-                                    return DropdownButtonFormField(
+                                    return DropdownButtonFormField<Bloco>(
                                       onSaved: (Bloco bloco) => _ordem.bloco = bloco,
                                       onChanged: (Bloco bloco) {
                                         setState(() {
@@ -192,9 +191,9 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                       },
                                       value: _blocoEscolhido,
                                       validator: (value) {
-                                        return Validador()
-                                        .add(Validar.OBRIGATORIO,msg: "Campo Bloco é obrigatório")
-                                        .valido(value);
+                                        if(value == null){
+                                          return "Campo bloco é obrigatório.";
+                                        }
                                       },
                                       items: snapshot.data.map<DropdownMenuItem<Bloco>>((Bloco bloco){
                                         return DropdownMenuItem<Bloco>(
@@ -252,9 +251,9 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                       },
                                       value: _pisoEscolhido,
                                       validator: (value) {
-                                        return Validador()
-                                        .add(Validar.OBRIGATORIO,msg: "Campo Piso é obrigatório")
-                                        .valido(value);
+                                       if(value == null){
+                                          return "Campo piso é obrigatório.";
+                                        }
                                       },
                                       items: snapshot.data.map<DropdownMenuItem<Piso>>((Piso piso){
                                         return DropdownMenuItem<Piso>(
@@ -315,9 +314,9 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                       onSaved: (Sala sala) => _ordem.sala = sala,
                                       value: _salaEscolhida,
                                       validator: (value) {
-                                        return Validador()
-                                        .add(Validar.OBRIGATORIO,msg: "Campo Sala é obrigatório")
-                                        .valido(value);
+                                       if(value == null){
+                                          return "Campo sala é obrigatório.";
+                                        }
                                       },
                                       items: snapshot.data.map<DropdownMenuItem<Sala>>((Sala sala){
                                         return DropdownMenuItem<Sala>(
@@ -403,3 +402,4 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     );
   }
 }
+
