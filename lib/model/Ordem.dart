@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:helpdesk/model/Bloco.dart';
+import 'package:helpdesk/model/Local.dart';
 import 'package:helpdesk/model/Pessoa.dart';
-import 'package:helpdesk/model/Piso.dart';
-import 'package:helpdesk/model/Sala.dart';
 import 'package:helpdesk/model/Situacao.dart';
 
 class Ordem {
@@ -17,9 +15,7 @@ class Ordem {
   Situacao situacao;
   Pessoa cliente;
   Pessoa tecnico;
-  Bloco bloco;
-  Sala sala;
-  Piso piso;
+  Local local;
   Ordem({
     this.idOrdem,
     this.titulo,
@@ -31,12 +27,15 @@ class Ordem {
     this.situacao,
     this.cliente,
     this.tecnico,
-    this.bloco,
-    this.sala,
-    this.piso,
+    this.local,
   });
+  
 
  
+
+ 
+
+  
 
   Map<String, dynamic> toMap() {
     return {
@@ -49,10 +48,8 @@ class Ordem {
       'dataTermino': null,
       'situacao': situacao.toMap(),
       'cliente': cliente.toMap(),
-      'tecnico': tecnico != null? tecnico.toMap(): null,
-      'bloco': bloco.toMap(),
-      'sala': sala.toMap(),
-      'piso': piso.toMap(),
+      'tecnico': tecnico == null? null: tecnico.toMap(),
+      'local': local.toMap(),
     };
   }
 
@@ -68,9 +65,7 @@ class Ordem {
       situacao: Situacao.fromMap(map['situacao']),
       cliente: Pessoa.fromMap(map['cliente']),
       tecnico: Pessoa.fromMap(map['tecnico']),
-      bloco: Bloco.fromMap(map['bloco']),
-      sala: Sala.fromMap(map['sala']),
-      piso: Piso.fromMap(map['piso']),
+      local: Local.fromMap(map['local']),
     );
   }
 
@@ -80,7 +75,7 @@ class Ordem {
 
   @override
   String toString() {
-    return 'Ordem(idOrdem: $idOrdem, titulo: $titulo, descricao: $descricao, solucao: $solucao, imagem: $imagem, dataInicio: $dataInicio, dataTermino: $dataTermino, situacao: $situacao, cliente: $cliente, tecnico: $tecnico, bloco: $bloco, sala: $sala, piso: $piso)';
+    return 'Ordem(idOrdem: $idOrdem, titulo: $titulo, descricao: $descricao, solucao: $solucao, imagem: $imagem, dataInicio: $dataInicio, dataTermino: $dataTermino, situacao: $situacao, cliente: $cliente, tecnico: $tecnico, local: $local)';
   }
 
   @override
@@ -98,9 +93,7 @@ class Ordem {
       other.situacao == situacao &&
       other.cliente == cliente &&
       other.tecnico == tecnico &&
-      other.bloco == bloco &&
-      other.sala == sala &&
-      other.piso == piso;
+      other.local == local;
   }
 
   @override
@@ -115,8 +108,6 @@ class Ordem {
       situacao.hashCode ^
       cliente.hashCode ^
       tecnico.hashCode ^
-      bloco.hashCode ^
-      sala.hashCode ^
-      piso.hashCode;
+      local.hashCode;
   }
 }

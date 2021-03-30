@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/PessoaRepository.dart';
 import 'package:validadores/Validador.dart';
@@ -12,15 +13,16 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   Pessoa _pessoa = Pessoa();
   final PessoaRepository _repository = PessoaRepository();
-  
-  _login() async{
+
+  _login() async {
     Pessoa p = await _repository.logarPessoa(_pessoa);
     print("-------------" + p.tipoPessoa.nomeTipoPessoa);
-    if(p.tipoPessoa.nomeTipoPessoa == "Cliente"){
-      Navigator.pushNamedAndRemoveUntil(context, "/homecliente",(Route<dynamic> route) => false,arguments: p);
-    }
-    else if(p.tipoPessoa.nomeTipoPessoa == "Técnico"){
-      Navigator.pushReplacementNamed(context, "/hometecnico",arguments: p);
+    if (p.tipoPessoa.nomeTipoPessoa == "Cliente") {
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/homecliente", (Route<dynamic> route) => false,
+          arguments: p);
+    } else if (p.tipoPessoa.nomeTipoPessoa == "Técnico") {
+      Navigator.pushReplacementNamed(context, "/hometecnico", arguments: p);
     }
   }
 
@@ -38,39 +40,59 @@ class _LoginState extends State<Login> {
                   padding: EdgeInsets.only(top: 8, bottom: 10),
                   child: Text(
                     "Helpdesk",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold
-                    ),),
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Form(
                     key: _formKey,
                     child: Column(
                       children: [
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.email),
-                            hintText: "E-mail"
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          child: TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            
+                            style: TextStyle(
+                                color: themeData.primaryColor, fontSize: 14),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color(0xff0088cc), width: 2),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              prefixIcon: Icon(Icons.email),
+                              labelText: "E-mail",
+                            ),
+                            onSaved: (email) => _pessoa.email = email,
+                            validator: (valorEmail) {
+                              return Validador()
+                                  .add(Validar.EMAIL,
+                                      msg: "Insira um e-mail válido")
+                                  .add(Validar.OBRIGATORIO,
+                                      msg: "Insira seu e-mail de acesso")
+                                  .maxLength(50,
+                                      msg:
+                                          "Email deve ter menos de 50 caracteres")
+                                  .valido(valorEmail);
+                            },
                           ),
-                          onSaved: (email) => _pessoa.email = email,
-                          validator: (valorEmail) {
-                            return Validador()
-                                .add(Validar.EMAIL,
-                                    msg: "Insira um e-mail válido")
-                                .add(Validar.OBRIGATORIO,
-                                    msg: "Insira seu e-mail de acesso")
-                                .maxLength(50,
-                                    msg:
-                                        "Email deve ter menos de 50 caracteres")
-                                .valido(valorEmail);
-                          },
                         ),
-                        TextFormField(
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          child: TextFormField(
                           decoration: InputDecoration(
-                            icon: Icon(Icons.lock),
-                            hintText: "Senha"
-                          ),
+
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color(0xff0088cc), width: 2),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              prefixIcon: Icon(Icons.lock),
+                              labelText: "Senha",
+                              labelStyle: TextStyle(
+                                color: Color(0xff0088cc)
+                              )
+                            ),
                           obscureText: true,
                           onSaved: (senha) => _pessoa.senha = senha,
                           validator: (valorSenha) {
@@ -81,6 +103,7 @@ class _LoginState extends State<Login> {
                                     msg: "Senha deve ter menos de 8 caracteres")
                                 .valido(valorSenha);
                           },
+                        ),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8),
@@ -102,12 +125,14 @@ class _LoginState extends State<Login> {
                                   onTap: () {},
                                 ),
                                 ElevatedButton(
+                                  style: ButtonStyle(
+                                    
+                                  ),
                                   child: Text("Entrar"),
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
                                       _login();
-                                      
                                     }
                                   },
                                 )
