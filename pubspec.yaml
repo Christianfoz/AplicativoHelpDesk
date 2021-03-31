@@ -33,6 +33,8 @@ dependencies:
   dio: ^3.0.10
   brasil_fields: 1.1.1
   flutter_typeahead: ^2.0.0
+  flutter_switch: ^0.2.2
+  
 
 
 dev_dependencies:
