@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:helpdesk/view/Cadastro.dart';
 import 'package:helpdesk/view/CadastroChamado.dart';
 import 'package:helpdesk/view/HomeCliente.dart';
+import 'package:helpdesk/view/HomeTecnico.dart';
 import 'package:helpdesk/view/Login.dart';
 
 class RouteGen {
@@ -17,7 +18,9 @@ class RouteGen {
       case "/homecliente":
         return MaterialPageRoute(builder: (context) => HomeCliente(args));
         break;
-
+      case "/hometecnico":
+        return MaterialPageRoute(builder: (context) => HomeTecnico(args));
+        break;
       case "/cadastrochamado":
         return MaterialPageRoute(builder: (context) => CadastroChamado(args));
         break;

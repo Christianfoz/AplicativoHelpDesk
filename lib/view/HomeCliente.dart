@@ -18,8 +18,8 @@ class _HomeClienteState extends State<HomeCliente> {
   final _controller = StreamController<List<Ordem>>.broadcast();
 
   Future<Stream<List<Ordem>>> _adicionarListener() async {
-    
-    Stream<List<Ordem>> stream =  Stream.fromFuture(_ordemRepository.listarOrdens());
+    Stream<List<Ordem>> stream =
+        Stream.fromFuture(_ordemRepository.listarOrdens());
     stream.listen((event) {
       _controller.add(event);
     });
@@ -29,9 +29,7 @@ class _HomeClienteState extends State<HomeCliente> {
     Navigator.pushNamed(context, "/cadastrochamado", arguments: widget._pessoa);
   }
 
-  abrirPerfil(){
-
-  }
+  abrirPerfil() {}
 
   @override
   void initState() {
@@ -43,60 +41,80 @@ class _HomeClienteState extends State<HomeCliente> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-      ),
-      drawer: Drawer(
-          child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          GestureDetector(
-            onTap: () => abrirPerfil(),
-            child: UserAccountsDrawerHeader(
-              accountEmail: Text(widget._pessoa.email),
-              accountName:
-                  Text(widget._pessoa.nome + " " + widget._pessoa.sobrenome),
-              currentAccountPicture: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(
-                      "http://192.168.0.107:8080/${widget._pessoa.foto}")),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.add,color: themeData.primaryColor),
-            title: Text(
-              "Cadastrar nova ordem",
-              style: TextStyle(color: themeData.primaryColor),
-            ),
-            onTap: () => _abrirTelaChamado(),
-          ),
-          ListTile(
-            leading: Icon(Icons.search,color: themeData.primaryColor,),
-            title: Text(
-              "Pesquisar ordens",
-              style: TextStyle(color: themeData.primaryColor),
-            ),
-            onTap: () => Navigator.pop(context),
-          ),
-          ListTile(
-            leading: Icon(Icons.person,color: themeData.primaryColor),
-            title: Text(
-              "Perfil",
-              style: TextStyle(color: themeData.primaryColor),
-            ),
-            onTap: () => Navigator.pop(context),
-          )
-        ],
-      )),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
+        appBar: AppBar(
+          title: Text("Home Cliente"),
         ),
-        backgroundColor: themeData.primaryColor,
-        onPressed: () => _abrirTelaChamado(),
-      ),
-      body: StreamBuilder(
+        drawer: Drawer(
+            child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            GestureDetector(
+              onTap: () => abrirPerfil(),
+              child: UserAccountsDrawerHeader(
+                accountEmail: Text(widget._pessoa.email),
+                accountName:
+                    Text(widget._pessoa.nome + " " + widget._pessoa.sobrenome),
+                currentAccountPicture: CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(
+                        "http://192.168.0.107:8080/${widget._pessoa.foto}")),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.add, color: themeData.primaryColor),
+              title: Text(
+                "Cadastrar nova ordem",
+                style: TextStyle(color: themeData.primaryColor),
+              ),
+              onTap: () => _abrirTelaChamado(),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.search,
+                color: themeData.primaryColor,
+              ),
+              title: Text(
+                "Pesquisar ordens",
+                style: TextStyle(color: themeData.primaryColor),
+              ),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: Icon(Icons.person, color: themeData.primaryColor),
+              title: Text(
+                "Perfil",
+                style: TextStyle(color: themeData.primaryColor),
+              ),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+                leading: Icon(Icons.logout, color: themeData.primaryColor),
+                title: Text(
+                  "Sair",
+                  style: TextStyle(color: themeData.primaryColor),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/login");
+                })
+          ],
+        )),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          backgroundColor: themeData.primaryColor,
+          onPressed: () => _abrirTelaChamado(),
+        ),
+        body: Container(
+          color: themeData.primaryColor,
+          child: Container(
+            
+          ),
+        )
+    );
+    /*StreamBuilder(
         builder: (context, AsyncSnapshot<List<Ordem>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -127,7 +145,6 @@ class _HomeClienteState extends State<HomeCliente> {
               break;
           }
         },
-        stream: _controller.stream),
-      );
+        stream: _controller.stream),*/
   }
 }

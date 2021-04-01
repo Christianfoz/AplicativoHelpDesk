@@ -23,6 +23,26 @@ class _CadastroState extends State<Cadastro> {
   Pessoa _pessoa = Pessoa();
   final PessoaRepository _repository = PessoaRepository();
 
+  _mostrarDialogEsperando(context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          content: new Row(
+            children: [
+              Container(
+                child: CircularProgressIndicator(),
+                padding: EdgeInsets.only(left: 5, right: 5),
+              ),
+              Container(child: Text("Cadastrando")),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   _cadastrarPessoa() async {
     if (_switch) {
       _pessoa.tipoPessoa = TipoPessoa.alt(2, "Técnico");
@@ -32,10 +52,15 @@ class _CadastroState extends State<Cadastro> {
     if (_imagemSelecionada == null) {
       _pessoa.foto = "sem-foto.png";
     } else {
+      _mostrarDialogEsperando(context);
       String url = await _repository.enviarFoto(_imagemSelecionada);
       _pessoa.foto = url;
+      await _repository.inserirPessoa(_pessoa);
+      Navigator.pop(context);
     }
+     _mostrarDialogEsperando(context);
     await _repository.inserirPessoa(_pessoa);
+    Navigator.pop(context);
   }
 
   _tirarFotoCamera() async {
@@ -64,7 +89,8 @@ class _CadastroState extends State<Cadastro> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Cadastro"),
+          title: Text(
+            "Cadastro",),
         ),
         body: Container(
             color: themeData.primaryColor,
@@ -100,10 +126,11 @@ class _CadastroState extends State<Cadastro> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               GestureDetector(
-                                onTap: _tirarFotoCamera(),
+                                onTap: () => _tirarFotoCamera(),
                                 child: Container(
                                   padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(Icons.camera_alt,color:Colors.white),
                                       Center(
@@ -111,8 +138,8 @@ class _CadastroState extends State<Cadastro> {
                                           "Camera",
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                              fontSize: 18,
+                                            ),
                                         ),
                                       ),
                                     ],
@@ -126,17 +153,33 @@ class _CadastroState extends State<Cadastro> {
                                   ),
                                 ),
                               ),
-                              RaisedButton(
-                                  onPressed: _tirarFotoGaleria,
+                              GestureDetector(
+                                onTap: () => _tirarFotoGaleria(),
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                                   child: Row(
                                     children: [
-                                      Icon(Icons.insert_photo_rounded),
-                                      SizedBox(
-                                        width: 2,
+                                      Icon(Icons.insert_photo_rounded,color:Colors.white),
+                                      Center(
+                                        child: Text(
+                                          "Galeria",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              ),
+                                        ),
                                       ),
-                                      Text("Galeria")
                                     ],
-                                  )),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(0, 128, 255, 1),
+                                      Color.fromRGBO(51, 153, 255, 1)
+                                    ]),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                           Container(
@@ -375,7 +418,7 @@ class _CadastroState extends State<Cadastro> {
                                               EdgeInsets.fromLTRB(16, 8, 16, 8),
                                           child: Center(
                                             child: Text(
-                                              "Entrar",
+                                              "Cadastrar",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,

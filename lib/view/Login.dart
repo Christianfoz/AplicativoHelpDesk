@@ -44,7 +44,9 @@ class _LoginState extends State<Login> {
           context, "/homecliente", (Route<dynamic> route) => false,
           arguments: p);
     } else if (p.tipoPessoa.nomeTipoPessoa == "Técnico") {
-      Navigator.pushReplacementNamed(context, "/hometecnico", arguments: p);
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/hometecnico", (Route<dynamic> route) => false,
+          arguments: p);
     }
   }
 
