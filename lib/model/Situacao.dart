@@ -32,7 +32,7 @@ class Situacao {
     return Situacao(
       idSituacao: map['idSituacao'],
       nomeSituacao: map['nomeSituacao'],
-      ordens: List<Ordem>.from(map['ordens']?.map((x) => Ordem.fromMap(x))),
+      ordens: map['ordens'] == null ? null : List<Ordem>.from(map['ordens']?.map((x) => Ordem.fromMap(x))),
     );
   }
 

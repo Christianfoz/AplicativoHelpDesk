@@ -58,13 +58,13 @@ class Ordem {
       idOrdem: map['idOrdem'],
       titulo: map['titulo'],
       descricao: map['descricao'],
-      solucao: map['solucao'],
+      solucao: map['solucao'] == null ? null : map['solucao'],
       imagem: map['imagem'],
-      dataInicio: DateTime.fromMillisecondsSinceEpoch(map['dataInicio']),
-      dataTermino: DateTime.fromMillisecondsSinceEpoch(map['dataTermino']),
+      dataInicio: DateTime.parse(map['dataInicio']),
+      dataTermino: map['dataTermino'] == null ? null : DateTime.fromMillisecondsSinceEpoch(map['dataTermino']),
       situacao: Situacao.fromMap(map['situacao']),
       cliente: Pessoa.fromMap(map['cliente']),
-      tecnico: Pessoa.fromMap(map['tecnico']),
+      tecnico: map['tecnico'] == null ? null : Pessoa.fromMap(map['tecnico']),
       local: Local.fromMap(map['local']),
     );
   }

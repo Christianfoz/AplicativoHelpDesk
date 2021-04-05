@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:helpdesk/view/Cadastro.dart';
 import 'package:helpdesk/view/CadastroChamado.dart';
+import 'package:helpdesk/view/DetalheChamado.dart';
 import 'package:helpdesk/view/HomeCliente.dart';
 import 'package:helpdesk/view/HomeTecnico.dart';
 import 'package:helpdesk/view/Login.dart';
@@ -23,6 +24,9 @@ class RouteGen {
         break;
       case "/cadastrochamado":
         return MaterialPageRoute(builder: (context) => CadastroChamado(args));
+        break;
+      case "/detalhechamado":
+        return MaterialPageRoute(builder: (context) => DetalheChamado(args));
         break;
     }
   }

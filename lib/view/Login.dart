@@ -68,6 +68,7 @@ class _LoginState extends State<Login> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  SizedBox(height: 30,),
                   Padding(
                     padding: EdgeInsets.only(top: 30, bottom: 10),
                     child: Text(
@@ -182,6 +183,9 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                height: 5,
                               )
                             ])),
                           ),
