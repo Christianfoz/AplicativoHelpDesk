@@ -9,6 +9,18 @@ class OrdemRepository{
       .then((value) => value.data);
     }
 
+  Future<bool> atualizarEstadoParaEmProgresso(Ordem p) async{
+      var _dio = CustomDio().instance;
+      return await _dio.put("http://192.168.0.107:8080/ordem/atualizaParaEmProgresso",data: p.toJson())
+      .then((value) => value.data);
+    }
+
+    Future<bool> atualizarEstadoParaResolvido(Ordem p) async{
+      var _dio = CustomDio().instance;
+      return await _dio.put("http://192.168.0.107:8080/ordem/atualizaParaResolvido",data: p.toJson())
+      .then((value) => value.data);
+    }
+
   Future<List<Ordem>> listarOrdens() async{
     var _dio = CustomDio().instance;
     return await _dio.get("http://192.168.0.107:8080/ordem").then((value) {

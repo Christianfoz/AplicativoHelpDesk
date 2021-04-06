@@ -31,5 +31,11 @@ class PessoaRepository {
       return await _dio.post("http://192.168.0.107:8080/pessoa/login",data: p.toJsonLogin())
       .then((value) => Pessoa.fromMap(value.data));
     }
-  }
 
+    Future<int> verificarQuantidadeChamado(int id) async {
+    var _dio = CustomDio().instance;
+    return await _dio
+        .get("http://192.168.0.107:8080/pessoa/verificacaoChamado/$id")
+        .then((value) => value.data);
+    }
+  }
