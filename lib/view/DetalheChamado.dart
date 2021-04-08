@@ -5,6 +5,7 @@ import 'package:helpdesk/model/Situacao.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/repository/PessoaRepository.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:validadores/validadores.dart';
 
@@ -192,6 +193,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
           content: Container(
             padding: EdgeInsets.all(16),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Center(
                   child: Text(
@@ -371,6 +373,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('pt_BR', null);
     return Scaffold(
         appBar: AppBar(title: Text("Detalhes do chamado")),
         body: Container(
@@ -557,7 +560,6 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                             DateFormat('HH:mm', 'pt_Br').format(
                                                 widget._pessoaOrdem.ordem
                                                     .dataTermino),
-                                        maxLines: 1,
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.normal),

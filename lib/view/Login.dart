@@ -131,6 +131,9 @@ class _LoginState extends State<Login> {
                                     .maxLength(8,
                                         msg:
                                             "Senha deve ter menos de 8 caracteres")
+                                    .minLength(6,
+                                        msg:
+                                            "Senha deve ter de 6 caracteres ou mais")
                                     .valido(valorSenha);
                               },
                             ),
@@ -149,7 +152,8 @@ class _LoginState extends State<Login> {
                                   padding: EdgeInsets.only(top: 8, bottom: 8)),
                               GestureDetector(
                                 child: Text("Esqueceu sua senha? Clique aqui"),
-                                onTap: () {},
+                                onTap: () => Navigator.pushNamed(
+                                        context, "/esquecisenha"),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 20, bottom: 20),

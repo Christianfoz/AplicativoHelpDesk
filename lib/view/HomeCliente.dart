@@ -5,6 +5,8 @@ import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
+import 'package:helpdesk/util/CustomSearchDelegate.dart';
+import 'package:helpdesk/util/PessoaFiltro.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -19,12 +21,15 @@ class HomeCliente extends StatefulWidget {
 class _HomeClienteState extends State<HomeCliente> {
   final OrdemRepository _ordemRepository = OrdemRepository();
   final _controller = StreamController<List<Ordem>>.broadcast();
+  String _resultado = "";
+  List<Ordem> _ordens;
 
   Future<Stream<List<Ordem>>> _adicionarListener() async {
     Stream<List<Ordem>> stream =
         Stream.fromFuture(_ordemRepository.listarOrdens());
     stream.listen((event) {
       _controller.add(event);
+      print(event);
     });
   }
 
@@ -35,8 +40,9 @@ class _HomeClienteState extends State<HomeCliente> {
   abrirPerfil() {}
 
   _detalharChamado(Ordem ordem) {
-    PessoaOrdem _pessoaOrdem = PessoaOrdem(pessoa: widget._pessoa,ordem: ordem);
-    Navigator.pushNamed(context, "/detalhechamado",arguments: _pessoaOrdem);
+    PessoaOrdem _pessoaOrdem =
+        PessoaOrdem(pessoa: widget._pessoa, ordem: ordem);
+    Navigator.pushNamed(context, "/detalhechamado", arguments: _pessoaOrdem);
   }
 
   Color _verCor(Ordem ordem) {
@@ -61,6 +67,16 @@ class _HomeClienteState extends State<HomeCliente> {
     initializeDateFormatting('pt_BR', null);
     return Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () async {
+                  final result = await showSearch<String>(
+                    context: context,
+                    delegate: CustomSearchDelegate(),
+                  );
+                }),
+          ],
           title: Text("Home Cliente"),
         ),
         drawer: Drawer(
@@ -93,10 +109,41 @@ class _HomeClienteState extends State<HomeCliente> {
                 color: themeData.primaryColor,
               ),
               title: Text(
-                "Pesquisar ordens",
+                "Ordens Criadas",
                 style: TextStyle(color: themeData.primaryColor),
               ),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 1,pessoa: widget._pessoa));
+              } ,
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.search,
+                color: themeData.primaryColor,
+              ),
+              title: Text(
+                "Ordens Em Andamento",
+                style: TextStyle(color: themeData.primaryColor),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 2,pessoa: widget._pessoa));
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.search,
+                color: themeData.primaryColor,
+              ),
+              title: Text(
+                "Ordens Resolvidas",
+                style: TextStyle(color: themeData.primaryColor),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 3,pessoa: widget._pessoa));
+              } ,
             ),
             ListTile(
               leading: Icon(Icons.person, color: themeData.primaryColor),
@@ -133,7 +180,11 @@ class _HomeClienteState extends State<HomeCliente> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
+                  GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",
+                      arguments:
+                          PessoaFiltro(filtro: 1, pessoa: widget._pessoa)),
+                  child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: 20,
@@ -141,8 +192,11 @@ class _HomeClienteState extends State<HomeCliente> {
                       child: Container(color: Color(0xffff7b7b)),
                     ),
                   ),
-                  Text("Criado"),
-                  Padding(
+                ),
+                Text("Criado"),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 2,pessoa: widget._pessoa)),
+                  child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: 20,
@@ -150,8 +204,11 @@ class _HomeClienteState extends State<HomeCliente> {
                       child: Container(color: Color(0xffd5d1d6)),
                     ),
                   ),
-                  Text("Em andamento"),
-                  Padding(
+                ),
+                Text("Em andamento"),
+                GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 3,pessoa: widget._pessoa)),
+                    child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: 20,
@@ -159,7 +216,8 @@ class _HomeClienteState extends State<HomeCliente> {
                       child: Container(color: Color(0xff0088cc)),
                     ),
                   ),
-                  Text("Resolvido"),
+                ),
+                Text("Resolvido"),
                 ],
               ),
             ),
@@ -235,6 +293,7 @@ class _HomeClienteState extends State<HomeCliente> {
                                                 child: Align(
                                                     alignment:
                                                         Alignment.centerRight,
+                                                    //final formattedStr =
                                                     child: Text(
                                                       "Criado em " +
                                                           DateFormat(

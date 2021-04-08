@@ -1,41 +1,47 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Ordem.dart';
-import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
-import 'package:helpdesk/util/CustomSearchDelegate.dart';
 import 'package:helpdesk/util/PessoaFiltro.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-class HomeTecnico extends StatefulWidget {
-  Pessoa _pessoa;
-  HomeTecnico(this._pessoa);
+class OrdensFiltro extends StatefulWidget {
+  PessoaFiltro _pessoaFiltro;
+  OrdensFiltro(this._pessoaFiltro);
   @override
-  _HomeTecnicoState createState() => _HomeTecnicoState();
+  _OrdensFiltroState createState() => _OrdensFiltroState();
 }
 
-class _HomeTecnicoState extends State<HomeTecnico> {
+class _OrdensFiltroState extends State<OrdensFiltro> {
   final OrdemRepository _ordemRepository = OrdemRepository();
   final _controller = StreamController<List<Ordem>>.broadcast();
-  String _resultado = "";
 
-  Future<Stream<List<Ordem>>> _adicionarListener() async {
+   Future<Stream<List<Ordem>>> _adicionarListener() async {
     Stream<List<Ordem>> stream =
-        Stream.fromFuture(_ordemRepository.listarOrdens());
+        Stream.fromFuture(_ordemRepository.listarOrdensPorSituacao(widget._pessoaFiltro.filtro));
     stream.listen((event) {
       _controller.add(event);
+      print(event);
     });
   }
 
-  abrirPerfil() {}
+  Text _tituloAppBar(){
+    if(widget._pessoaFiltro.filtro == 1){
+      return Text("Ordens Criadas");
+    }
+    else if(widget._pessoaFiltro.filtro == 2){
+      return Text("Ordens em Andamento");
+    }
+    else{
+      return Text("Ordens resolvidas");
+    }
+  }
 
-  _detalharChamado(Ordem ordem) {
+   _detalharChamado(Ordem ordem) {
     PessoaOrdem _pessoaOrdem =
-        PessoaOrdem(pessoa: widget._pessoa, ordem: ordem);
+        PessoaOrdem(pessoa: widget._pessoaFiltro.pessoa, ordem: ordem);
     Navigator.pushNamed(context, "/detalhechamado", arguments: _pessoaOrdem);
   }
 
@@ -49,121 +55,27 @@ class _HomeTecnicoState extends State<HomeTecnico> {
     }
   }
 
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _adicionarListener();
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting('pt_BR', null);
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () async {
-                  String res = await showSearch(
-                      context: context, delegate: CustomSearchDelegate());
-                  setState(() {
-                    _resultado = res;
-                  });
-                }),
-          ],
-          title: Text("Home Técnico"),
-        ),
-        drawer: Drawer(
-            child: ListView(
-          padding: EdgeInsets.zero,
+      appBar: AppBar(
+        title: _tituloAppBar(),
+      ),
+      body: Column(
           children: [
-            GestureDetector(
-              onTap: () => abrirPerfil(),
-              child: UserAccountsDrawerHeader(
-                accountEmail: Text(widget._pessoa.email),
-                accountName:
-                    Text(widget._pessoa.nome + " " + widget._pessoa.sobrenome),
-                currentAccountPicture: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(
-                        "http://192.168.0.107:8080/${widget._pessoa.foto}")),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.search,
-                color: themeData.primaryColor,
-              ),
-              title: Text(
-                "Ordens Criadas",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",
-                    arguments: PessoaFiltro(filtro: 1, pessoa: widget._pessoa));
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.search,
-                color: themeData.primaryColor,
-              ),
-              title: Text(
-                "Ordens Em Andamento",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",
-                    arguments: PessoaFiltro(filtro: 2, pessoa: widget._pessoa));
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.search,
-                color: themeData.primaryColor,
-              ),
-              title: Text(
-                "Ordens Resolvidas",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",
-                    arguments: PessoaFiltro(filtro: 3, pessoa: widget._pessoa));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.person, color: themeData.primaryColor),
-              title: Text(
-                "Perfil",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
-              onTap: () => Navigator.pop(context),
-            ),
-            ListTile(
-                leading: Icon(Icons.logout, color: themeData.primaryColor),
-                title: Text(
-                  "Sair",
-                  style: TextStyle(color: themeData.primaryColor),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, "/login");
-                })
-          ],
-        )),
-        body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",
-                      arguments:
-                          PessoaFiltro(filtro: 1, pessoa: widget._pessoa)),
-                  child: Padding(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: 20,
@@ -171,11 +83,8 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                       child: Container(color: Color(0xffff7b7b)),
                     ),
                   ),
-                ),
-                Text("Criado"),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 2,pessoa: widget._pessoa)),
-                  child: Padding(
+                  Text("Criado"),
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: 20,
@@ -183,11 +92,8 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                       child: Container(color: Color(0xffd5d1d6)),
                     ),
                   ),
-                ),
-                Text("Em andamento"),
-                GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 3,pessoa: widget._pessoa)),
-                    child: Padding(
+                  Text("Em andamento"),
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: 20,
@@ -195,9 +101,9 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                       child: Container(color: Color(0xff0088cc)),
                     ),
                   ),
-                ),
-                Text("Resolvido"),
-              ],
+                  Text("Resolvido"),
+                ],
+              ),
             ),
             Expanded(
                 child: StreamBuilder(
@@ -271,6 +177,7 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                                                 child: Align(
                                                     alignment:
                                                         Alignment.centerRight,
+                                                    //final formattedStr =
                                                     child: Text(
                                                       "Criado em " +
                                                           DateFormat(
@@ -303,10 +210,12 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                               },
                             );
                           }
+                          break;
                       }
                     },
                     stream: _controller.stream))
           ],
-        ));
+        ),
+    );
   }
 }

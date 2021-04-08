@@ -75,7 +75,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     _mostrarDialogEsperando(context);
     _ordem.cliente = widget._pessoa;
     _ordem.dataInicio = DateTime.now().toUtc();
-    _ordem.situacao = Situacao.alt(1, "CRIADA");
+    _ordem.situacao = Situacao.alt(1, "Criada");
     _ordem.dataInicio = DateTime.now();
     _ordem.local = _local;
     print(_ordem.toMap());

@@ -55,11 +55,27 @@ class _CadastroState extends State<Cadastro> {
       _mostrarDialogEsperando(context);
       String url = await _repository.enviarFoto(_imagemSelecionada);
       _pessoa.foto = url;
-      await _repository.inserirPessoa(_pessoa);
-      Navigator.pop(context);
+      await _repository.inserirPessoa(_pessoa).then((value) {
+        if(value){
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, "/login");
+        }
+        else{
+          Navigator.pop(context);
+        }
+      });
+      
     }
      _mostrarDialogEsperando(context);
-    await _repository.inserirPessoa(_pessoa);
+    await _repository.inserirPessoa(_pessoa).then((value) {
+        if(value){
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, "/login");
+        }
+        else{
+          
+        }
+      });
     Navigator.pop(context);
   }
 
