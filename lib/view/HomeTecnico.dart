@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Pessoa.dart';
@@ -71,7 +72,9 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                   });
                 }),
           ],
-          title: Text("Home Técnico"),
+          title: Text(
+            "Home Técnico",
+            style: GoogleFonts.lato(),),
         ),
         drawer: Drawer(
             child: ListView(
@@ -80,9 +83,13 @@ class _HomeTecnicoState extends State<HomeTecnico> {
             GestureDetector(
               onTap: () => abrirPerfil(),
               child: UserAccountsDrawerHeader(
-                accountEmail: Text(widget._pessoa.email),
+                accountEmail: Text(
+                  widget._pessoa.email,
+                  style: GoogleFonts.lato()),
                 accountName:
-                    Text(widget._pessoa.nome + " " + widget._pessoa.sobrenome),
+                    Text(
+                      widget._pessoa.nome + " " + widget._pessoa.sobrenome,
+                      style: GoogleFonts.lato(),),
                 currentAccountPicture: CircleAvatar(
                     radius: 30,
                     backgroundImage: NetworkImage(
@@ -96,13 +103,14 @@ class _HomeTecnicoState extends State<HomeTecnico> {
               ),
               title: Text(
                 "Ordens Criadas",
-                style: TextStyle(color: themeData.primaryColor),
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(color: themeData.primaryColor)
+                )
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",
-                    arguments: PessoaFiltro(filtro: 1, pessoa: widget._pessoa));
-              },
+                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 1,pessoa: widget._pessoa));
+              } ,
             ),
             ListTile(
               leading: Icon(
@@ -111,12 +119,13 @@ class _HomeTecnicoState extends State<HomeTecnico> {
               ),
               title: Text(
                 "Ordens Em Andamento",
-                style: TextStyle(color: themeData.primaryColor),
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(color: themeData.primaryColor)
+                )
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",
-                    arguments: PessoaFiltro(filtro: 2, pessoa: widget._pessoa));
+                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 2,pessoa: widget._pessoa));
               },
             ),
             ListTile(
@@ -126,19 +135,22 @@ class _HomeTecnicoState extends State<HomeTecnico> {
               ),
               title: Text(
                 "Ordens Resolvidas",
-                style: TextStyle(color: themeData.primaryColor),
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(color: themeData.primaryColor)
+                )
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",
-                    arguments: PessoaFiltro(filtro: 3, pessoa: widget._pessoa));
-              },
+                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 3,pessoa: widget._pessoa));
+              } ,
             ),
             ListTile(
               leading: Icon(Icons.person, color: themeData.primaryColor),
               title: Text(
                 "Perfil",
-                style: TextStyle(color: themeData.primaryColor),
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(color: themeData.primaryColor)
+                )
               ),
               onTap: () => Navigator.pop(context),
             ),
@@ -146,7 +158,9 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                 leading: Icon(Icons.logout, color: themeData.primaryColor),
                 title: Text(
                   "Sair",
-                  style: TextStyle(color: themeData.primaryColor),
+                  style: GoogleFonts.lato(
+                  textStyle: TextStyle(color: themeData.primaryColor)
+                )
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -205,7 +219,9 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
                         case ConnectionState.waiting:
-                          return CircularProgressIndicator();
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
                           break;
                         case ConnectionState.active:
                         case ConnectionState.done:
@@ -231,12 +247,14 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    "Ordem ${ordem.idOrdem}",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
+                                                      "Ordem ${ordem.idOrdem}",
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )),
                                                 ),
                                                 padding: EdgeInsets.all(10),
                                               ),
@@ -245,13 +263,15 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     child: Text(
-                                                      "Título: ${ordem.titulo}",
-                                                      maxLines: 1,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
+                                                        "Título: ${ordem.titulo}",
+                                                        maxLines: 1,
+                                                        style: GoogleFonts.lato(
+                                                          textStyle: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ))),
                                                 padding: EdgeInsets.all(10),
                                               ),
                                               Padding(
@@ -260,10 +280,11 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                                                         Alignment.centerLeft,
                                                     child: Text(
                                                       "Descrição: ${ordem.descricao}",
-                                                      maxLines: 5,
-                                                      style: TextStyle(
+                                                      maxLines: 2,
+                                                      style: GoogleFonts.lato(
+                                                          textStyle: TextStyle(
                                                         fontSize: 16,
-                                                      ),
+                                                      )),
                                                     )),
                                                 padding: EdgeInsets.all(10),
                                               ),
@@ -271,6 +292,7 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                                                 child: Align(
                                                     alignment:
                                                         Alignment.centerRight,
+                                                    //final formattedStr =
                                                     child: Text(
                                                       "Criado em " +
                                                           DateFormat(
@@ -285,10 +307,12 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                                                               .format(ordem
                                                                   .dataInicio),
                                                       maxLines: 1,
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight
-                                                              .normal),
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                          fontSize: 13,
+                                                          fontStyle: FontStyle.italic
+                                                          ),
+                                                      )
                                                     )),
                                                 padding: EdgeInsets.all(10),
                                               )
@@ -303,6 +327,7 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                               },
                             );
                           }
+                          break;
                       }
                     },
                     stream: _controller.stream))

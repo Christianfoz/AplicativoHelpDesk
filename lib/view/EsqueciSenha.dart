@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:validadores/validadores.dart';
@@ -17,12 +18,20 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
   _recuperacaoSenha(){
 
   }
-
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Esqueci minha senha"),
+          title: Text(
+            "Esqueci minha senha",
+            style: GoogleFonts.lato(),
+            ),
         ),
         body: Container(
             color: themeData.primaryColor,
@@ -47,9 +56,11 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                               "Insira CPF e Email para a geração de uma nova senha",
-                              style: TextStyle(
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold
+                              )
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -68,6 +79,7 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
                                         CpfInputFormatter()
                                       ],
                                       decoration: InputDecoration(
+                                        labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -95,8 +107,8 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
                                     padding: EdgeInsets.all(8),
                                     child: TextFormField(
                                       keyboardType: TextInputType.emailAddress,
-                                      style: TextStyle(fontSize: 14),
                                       decoration: InputDecoration(
+                                        labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -140,11 +152,13 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
                                           child: Center(
                                             child: Text(
                                               "Enviar Dados",
-                                              style: TextStyle(
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold),
-                                            ),
+                                            )
+                                              ),
                                           ),
                                           decoration: BoxDecoration(
                                             gradient: LinearGradient(colors: [

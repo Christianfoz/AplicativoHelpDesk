@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Local.dart';
 import 'package:helpdesk/model/Ordem.dart';
@@ -78,8 +79,6 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     _ordem.situacao = Situacao.alt(1, "Criada");
     _ordem.dataInicio = DateTime.now();
     _ordem.local = _local;
-    print(_ordem.toMap());
-    print("--------------" + _ordem.toMap().toString());
     if (_imagemSelecionada == null) {
       _ordem.imagem = "sem-imagem.png";
     } else {
@@ -101,7 +100,9 @@ class _CadastroChamadoState extends State<CadastroChamado> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Cadastro de Chamado"),
+          title: Text(
+            "Cadastro de Chamado",
+            style: GoogleFonts.lato(),),
         ),
         body: Container(
             color: themeData.primaryColor,
@@ -130,6 +131,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                     child: TextFormField(
                                     keyboardType: TextInputType.name,
                                     decoration: InputDecoration(
+                                      labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -157,6 +159,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                     maxLines: null,
                                     keyboardType: TextInputType.name,
                                     decoration: InputDecoration(
+                                      labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -184,6 +187,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                         TextFieldConfiguration(
                                             controller: _typeAheadController,
                                             decoration: InputDecoration(
+                                              labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -199,11 +203,19 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                       return suggestionsBox;
                                     },
                                     loadingBuilder: (context) {
-                                      return Text("Nenhum local encontrado");
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          child: Text("Nenhum local encontrado")
+                                        ),
+                                      );
                                     },
                                     itemBuilder: (context, itemData) {
                                       return ListTile(
-                                        title: Text(itemData.local),
+                                        title: Text(
+                                          itemData.local,
+                                          style: GoogleFonts.lato(),
+                                        ),
                                       );
                                     },
                                     suggestionsCallback: (pattern) async {
@@ -261,12 +273,17 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                     children: [
                                       Icon(Icons.camera_alt,color:Colors.white),
                                       Center(
-                                        child: Text(
-                                          "Camera",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 4),
+                                          child: Text(
+                                            "Camera",
+                                            style: GoogleFonts.lato(
+                                              textStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                              ),
+                                            )
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -288,12 +305,17 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                     children: [
                                       Icon(Icons.insert_photo_rounded,color:Colors.white),
                                       Center(
-                                        child: Text(
-                                          "Galeria",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 4),
+                                          child: Text(
+                                            "Galeria",
+                                            style: GoogleFonts.lato(
+                                              textStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                )
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -327,10 +349,12 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                           child: Center(
                                             child: Text(
                                               "Enviar chamado",
-                                              style: TextStyle(
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold),
+                                              )
                                             ),
                                           ),
                                           decoration: BoxDecoration(

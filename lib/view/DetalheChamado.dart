@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Situacao.dart';
@@ -26,6 +27,8 @@ class _DetalheChamadoState extends State<DetalheChamado> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          elevation: 5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           content: Container(
             padding: EdgeInsets.all(16),
             child: Column(
@@ -36,6 +39,9 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                     "Erro",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                ),
+                Center(
+                  child: Text("Tente novamente realizar a operação desejada."),
                 )
               ],
             ),
@@ -175,9 +181,9 @@ class _DetalheChamadoState extends State<DetalheChamado> {
 
   Widget _atualizarSituacaoEmProgresso(Ordem ordem) {
     _ordemRepository.atualizarEstadoParaEmProgresso(ordem).then((value) {
-      if(value){
+      if (value) {
         return _dialogSucesso();
-      }else{
+      } else {
         return _dialogErro();
       }
     }).onError((error, stackTrace) {
@@ -191,7 +197,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
       builder: (context) {
         return AlertDialog(
           content: Container(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(8),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -206,29 +212,30 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.all(8),
-                        child: TextFormField(
-                          maxLines: null,
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color(0xff0088cc), width: 2),
-                              borderRadius: BorderRadius.circular(2),
+                          padding: EdgeInsets.all(8),
+                          child: Flexible(
+                            child: TextFormField(
+                              maxLines: null,
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color(0xff0088cc), width: 2),
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                prefixIcon: Icon(Icons.text_snippet),
+                                labelText: "Solucão",
+                              ),
+                              onSaved: (String solucao) =>
+                                  widget._pessoaOrdem.ordem.solucao = solucao,
+                              validator: (descricao) {
+                                return Validador()
+                                    .add(Validar.OBRIGATORIO,
+                                        msg: "Campo Solução é obrigatório")
+                                    .valido(descricao);
+                              },
                             ),
-                            prefixIcon: Icon(Icons.text_snippet),
-                            labelText: "Solucão",
-                          ),
-                          onSaved: (String solucao) =>
-                              widget._pessoaOrdem.ordem.solucao = solucao,
-                          validator: (descricao) {
-                            return Validador()
-                                .add(Validar.OBRIGATORIO,
-                                    msg: "Campo Solução é obrigatório")
-                                .valido(descricao);
-                          },
-                        ),
-                      ),
+                          )),
                       Padding(
                         padding: EdgeInsets.only(top: 20, bottom: 20),
                         child: Center(
@@ -302,11 +309,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
         Ordem _ordem = widget._pessoaOrdem.ordem;
         _ordem.situacao = Situacao.alt(2, "Em andamento");
         _ordem.tecnico = widget._pessoaOrdem.pessoa;
-        _atualizarSituacaoEmProgresso(_ordem); 
-    }
-        });
+        _atualizarSituacaoEmProgresso(_ordem);
+      }
+    });
   }
-    
 
   Widget _verificarSituacao() {
     if (widget._pessoaOrdem.ordem.situacao.nomeSituacao == "Criada") {
@@ -320,10 +326,12 @@ class _DetalheChamadoState extends State<DetalheChamado> {
               child: Center(
                 child: Text(
                   "Aceitar Chamado",
-                  style: TextStyle(
+                  style: GoogleFonts.lato(
+                    textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
+                  )
                 ),
               ),
               decoration: BoxDecoration(
@@ -349,10 +357,12 @@ class _DetalheChamadoState extends State<DetalheChamado> {
               child: Center(
                 child: Text(
                   "Finalizar Chamado",
-                  style: TextStyle(
+                  style: GoogleFonts.lato(
+                    textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
+                  )
                 ),
               ),
               decoration: BoxDecoration(
@@ -375,7 +385,12 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   Widget build(BuildContext context) {
     initializeDateFormatting('pt_BR', null);
     return Scaffold(
-        appBar: AppBar(title: Text("Detalhes do chamado")),
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+            title: Text(
+          "Detalhes do chamado",
+          style: GoogleFonts.lato(),
+        )),
         body: Container(
           color: themeData.primaryColor,
           child: Center(
@@ -401,10 +416,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                 thickness: 2,
                               ),
                             )),
-                            Text(
-                              "Informação do Cliente",
-                              style: TextStyle(fontSize: 16),
-                            ),
+                            Text("Informação do Cliente",
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(fontSize: 16),
+                                )),
                             Expanded(
                                 child: Padding(
                               padding: EdgeInsets.all(8),
@@ -427,15 +442,16 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                 padding:
                                     const EdgeInsets.only(left: 4, bottom: 8),
                                 child: Text(
-                                  widget._pessoaOrdem.ordem.cliente.nome +
-                                      " " +
-                                      widget
-                                          ._pessoaOrdem.ordem.cliente.sobrenome,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                ),
+                                    widget._pessoaOrdem.ordem.cliente.nome +
+                                        " " +
+                                        widget._pessoaOrdem.ordem.cliente
+                                            .sobrenome,
+                                    style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
+                                    )),
                               ),
                             ],
                           ),
@@ -449,7 +465,8 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                             )),
                             Text(
                               "Informação do Chamado",
-                              style: TextStyle(fontSize: 16),
+                              style: GoogleFonts.lato(
+                                  textStyle: TextStyle(fontSize: 16)),
                             ),
                             Expanded(
                                 child: Padding(
@@ -465,8 +482,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                               alignment: Alignment.bottomLeft,
                               child: Text(
                                 widget._pessoaOrdem.ordem.titulo,
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.w800),
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w800)),
                               ),
                             ),
                           ),
@@ -477,8 +496,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                               child: Text(
                                 widget._pessoaOrdem.ordem.descricao,
                                 textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                  fontSize: 16,
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
@@ -490,8 +511,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                               child: Text(
                                 "Local: ${widget._pessoaOrdem.ordem.local.local}",
                                 textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                  fontSize: 16,
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
@@ -510,9 +533,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                       DateFormat('HH:mm', 'pt_Br').format(
                                           widget._pessoaOrdem.ordem.dataInicio),
                                   maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal)),
                                 )),
                           ),
                           Padding(
@@ -522,9 +546,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                               child: Text(
                                 "Situação: ${widget._pessoaOrdem.ordem.situacao.nomeSituacao}",
                                 textAlign: TextAlign.justify,
-                                style: TextStyle(
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
                                   fontSize: 16,
-                                ),
+                                )),
                               ),
                             ),
                           ),
@@ -535,12 +560,13 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                   child: Align(
                                     alignment: Alignment.bottomLeft,
                                     child: Text(
-                                      "Solução: ${widget._pessoaOrdem.ordem.solucao}",
-                                      textAlign: TextAlign.justify,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
+                                        "Solução: ${widget._pessoaOrdem.ordem.solucao}",
+                                        textAlign: TextAlign.justify,
+                                        style: GoogleFonts.lato(
+                                          textStyle: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        )),
                                   ),
                                 ),
                           widget._pessoaOrdem.ordem.dataTermino == null
@@ -560,9 +586,11 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                             DateFormat('HH:mm', 'pt_Br').format(
                                                 widget._pessoaOrdem.ordem
                                                     .dataTermino),
-                                        style: TextStyle(
+                                        style: GoogleFonts.lato(
+                                          textStyle: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.normal),
+                                            fontWeight: FontWeight.normal)
+                                        )
                                       )),
                                 ),
                           Row(children: <Widget>[
@@ -575,7 +603,9 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                             )),
                             Text(
                               "Imagem do Chamado",
-                              style: TextStyle(fontSize: 16),
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(fontSize: 16)
+                              ),
                             ),
                             Expanded(
                                 child: Padding(
@@ -591,7 +621,9 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                 child: widget._pessoaOrdem.ordem.imagem ==
                                         "sem-imagem.png"
                                     ? Center(
-                                        child: Text("Sem imagem"),
+                                        child: Text(
+                                          "Sem imagem",
+                                          style: GoogleFonts.lato()),
                                       )
                                     : Container(
                                         padding: EdgeInsets.all(16),
@@ -618,7 +650,9 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                       )),
                                       Text(
                                         "Opções de Técnico",
-                                        style: TextStyle(fontSize: 16),
+                                        style: GoogleFonts.lato(
+                                          textStyle: TextStyle(fontSize: 16)
+                                        ),
                                       ),
                                       Expanded(
                                           child: Padding(

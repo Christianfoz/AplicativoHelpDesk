@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Pessoa.dart';
@@ -29,7 +30,6 @@ class _HomeClienteState extends State<HomeCliente> {
         Stream.fromFuture(_ordemRepository.listarOrdens());
     stream.listen((event) {
       _controller.add(event);
-      print(event);
     });
   }
 
@@ -77,7 +77,10 @@ class _HomeClienteState extends State<HomeCliente> {
                   );
                 }),
           ],
-          title: Text("Home Cliente"),
+          title: Text(
+            "Home Cliente",
+            style: GoogleFonts.lato(),
+          ),
         ),
         drawer: Drawer(
             child: ListView(
@@ -86,9 +89,12 @@ class _HomeClienteState extends State<HomeCliente> {
             GestureDetector(
               onTap: () => abrirPerfil(),
               child: UserAccountsDrawerHeader(
-                accountEmail: Text(widget._pessoa.email),
-                accountName:
-                    Text(widget._pessoa.nome + " " + widget._pessoa.sobrenome),
+                accountEmail:
+                    Text(widget._pessoa.email, style: GoogleFonts.lato()),
+                accountName: Text(
+                  widget._pessoa.nome + " " + widget._pessoa.sobrenome,
+                  style: GoogleFonts.lato(),
+                ),
                 currentAccountPicture: CircleAvatar(
                     radius: 30,
                     backgroundImage: NetworkImage(
@@ -97,10 +103,9 @@ class _HomeClienteState extends State<HomeCliente> {
             ),
             ListTile(
               leading: Icon(Icons.add, color: themeData.primaryColor),
-              title: Text(
-                "Cadastrar nova ordem",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
+              title: Text("Cadastrar nova ordem",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: themeData.primaryColor))),
               onTap: () => _abrirTelaChamado(),
             ),
             ListTile(
@@ -108,27 +113,13 @@ class _HomeClienteState extends State<HomeCliente> {
                 Icons.search,
                 color: themeData.primaryColor,
               ),
-              title: Text(
-                "Ordens Criadas",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
+              title: Text("Ordens Criadas",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: themeData.primaryColor))),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 1,pessoa: widget._pessoa));
-              } ,
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.search,
-                color: themeData.primaryColor,
-              ),
-              title: Text(
-                "Ordens Em Andamento",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 2,pessoa: widget._pessoa));
+                Navigator.pushNamed(context, "/ordemfiltro",
+                    arguments: PessoaFiltro(filtro: 1, pessoa: widget._pessoa));
               },
             ),
             ListTile(
@@ -136,29 +127,41 @@ class _HomeClienteState extends State<HomeCliente> {
                 Icons.search,
                 color: themeData.primaryColor,
               ),
-              title: Text(
-                "Ordens Resolvidas",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
+              title: Text("Ordens Em Andamento",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: themeData.primaryColor))),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 3,pessoa: widget._pessoa));
-              } ,
+                Navigator.pushNamed(context, "/ordemfiltro",
+                    arguments: PessoaFiltro(filtro: 2, pessoa: widget._pessoa));
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.search,
+                color: themeData.primaryColor,
+              ),
+              title: Text("Ordens Resolvidas",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: themeData.primaryColor))),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, "/ordemfiltro",
+                    arguments: PessoaFiltro(filtro: 3, pessoa: widget._pessoa));
+              },
             ),
             ListTile(
               leading: Icon(Icons.person, color: themeData.primaryColor),
-              title: Text(
-                "Perfil",
-                style: TextStyle(color: themeData.primaryColor),
-              ),
+              title: Text("Perfil",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: themeData.primaryColor))),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
                 leading: Icon(Icons.logout, color: themeData.primaryColor),
-                title: Text(
-                  "Sair",
-                  style: TextStyle(color: themeData.primaryColor),
-                ),
+                title: Text("Sair",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(color: themeData.primaryColor))),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, "/login");
@@ -181,43 +184,47 @@ class _HomeClienteState extends State<HomeCliente> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",
-                      arguments:
-                          PessoaFiltro(filtro: 1, pessoa: widget._pessoa)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: Container(color: Color(0xffff7b7b)),
-                    ),
-                  ),
-                ),
-                Text("Criado"),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 2,pessoa: widget._pessoa)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: Container(color: Color(0xffd5d1d6)),
-                    ),
-                  ),
-                ),
-                Text("Em andamento"),
-                GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 3,pessoa: widget._pessoa)),
+                    onTap: () => Navigator.pushNamed(context, "/ordemfiltro",
+                        arguments:
+                            PessoaFiltro(filtro: 1, pessoa: widget._pessoa)),
                     child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: Container(color: Color(0xff0088cc)),
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Container(color: Color(0xffff7b7b)),
+                      ),
                     ),
                   ),
-                ),
-                Text("Resolvido"),
+                  Text("Criado", style: GoogleFonts.lato()),
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, "/ordemfiltro",
+                        arguments:
+                            PessoaFiltro(filtro: 2, pessoa: widget._pessoa)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Container(color: Color(0xffd5d1d6)),
+                      ),
+                    ),
+                  ),
+                  Text("Em andamento", style: GoogleFonts.lato()),
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, "/ordemfiltro",
+                        arguments:
+                            PessoaFiltro(filtro: 3, pessoa: widget._pessoa)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Container(color: Color(0xff0088cc)),
+                      ),
+                    ),
+                  ),
+                  Text("Resolvido", style: GoogleFonts.lato()),
                 ],
               ),
             ),
@@ -227,7 +234,9 @@ class _HomeClienteState extends State<HomeCliente> {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
                         case ConnectionState.waiting:
-                          return CircularProgressIndicator();
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
                           break;
                         case ConnectionState.active:
                         case ConnectionState.done:
@@ -253,12 +262,14 @@ class _HomeClienteState extends State<HomeCliente> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    "Ordem ${ordem.idOrdem}",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
+                                                      "Ordem ${ordem.idOrdem}",
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )),
                                                 ),
                                                 padding: EdgeInsets.all(10),
                                               ),
@@ -267,13 +278,15 @@ class _HomeClienteState extends State<HomeCliente> {
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     child: Text(
-                                                      "Título: ${ordem.titulo}",
-                                                      maxLines: 1,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
+                                                        "Título: ${ordem.titulo}",
+                                                        maxLines: 1,
+                                                        style: GoogleFonts.lato(
+                                                          textStyle: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ))),
                                                 padding: EdgeInsets.all(10),
                                               ),
                                               Padding(
@@ -282,10 +295,11 @@ class _HomeClienteState extends State<HomeCliente> {
                                                         Alignment.centerLeft,
                                                     child: Text(
                                                       "Descrição: ${ordem.descricao}",
-                                                      maxLines: 5,
-                                                      style: TextStyle(
+                                                      maxLines: 2,
+                                                      style: GoogleFonts.lato(
+                                                          textStyle: TextStyle(
                                                         fontSize: 16,
-                                                      ),
+                                                      )),
                                                     )),
                                                 padding: EdgeInsets.all(10),
                                               ),
@@ -308,10 +322,12 @@ class _HomeClienteState extends State<HomeCliente> {
                                                               .format(ordem
                                                                   .dataInicio),
                                                       maxLines: 1,
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight
-                                                              .normal),
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                          fontSize: 13,
+                                                          fontStyle: FontStyle.italic
+                                                          ),
+                                                      )
                                                     )),
                                                 padding: EdgeInsets.all(10),
                                               )

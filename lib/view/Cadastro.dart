@@ -4,6 +4,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/model/TipoPessoa.dart';
@@ -106,7 +107,8 @@ class _CadastroState extends State<Cadastro> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Cadastro",),
+            "Cadastro",
+            style: GoogleFonts.lato(),),
         ),
         body: Container(
             color: themeData.primaryColor,
@@ -150,12 +152,17 @@ class _CadastroState extends State<Cadastro> {
                                     children: [
                                       Icon(Icons.camera_alt,color:Colors.white),
                                       Center(
-                                        child: Text(
-                                          "Camera",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                            ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 4),
+                                          child: Text(
+                                            "Camera",
+                                            style: GoogleFonts.lato(
+                                              textStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                              ),
+                                            )
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -177,12 +184,17 @@ class _CadastroState extends State<Cadastro> {
                                     children: [
                                       Icon(Icons.insert_photo_rounded,color:Colors.white),
                                       Center(
-                                        child: Text(
-                                          "Galeria",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 4),
+                                          child: Text(
+                                            "Galeria",
+                                            style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18,
+                                                )
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -209,6 +221,7 @@ class _CadastroState extends State<Cadastro> {
                                     child: TextFormField(
                                       keyboardType: TextInputType.name,
                                       decoration: InputDecoration(
+                                        labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -238,6 +251,7 @@ class _CadastroState extends State<Cadastro> {
                                     child: TextFormField(
                                       keyboardType: TextInputType.name,
                                       decoration: InputDecoration(
+                                        labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -272,6 +286,7 @@ class _CadastroState extends State<Cadastro> {
                                         CpfInputFormatter()
                                       ],
                                       decoration: InputDecoration(
+                                        labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -304,6 +319,7 @@ class _CadastroState extends State<Cadastro> {
                                         TelefoneInputFormatter()
                                       ],
                                       decoration: InputDecoration(
+                                        labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -328,8 +344,8 @@ class _CadastroState extends State<Cadastro> {
                                     padding: EdgeInsets.all(8),
                                     child: TextFormField(
                                       keyboardType: TextInputType.emailAddress,
-                                      style: TextStyle(fontSize: 14),
                                       decoration: InputDecoration(
+                                        labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -359,6 +375,7 @@ class _CadastroState extends State<Cadastro> {
                                     padding: EdgeInsets.all(8),
                                     child: TextFormField(
                                       decoration: InputDecoration(
+                                        labelStyle: GoogleFonts.lato(),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Color(0xff0088cc),
@@ -386,7 +403,9 @@ class _CadastroState extends State<Cadastro> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
-                                        child: Text("Cliente"),
+                                        child: Text(
+                                          "Cliente",
+                                          style: GoogleFonts.lato(),),
                                         padding: EdgeInsets.all(8),
                                       ),
                                       FlutterSwitch(
@@ -401,18 +420,10 @@ class _CadastroState extends State<Cadastro> {
                                           });
                                         },
                                       ),
-                                      /*
-                                      Switch(
-
-                                          value: _switch,
-                                          onChanged: (status) {
-                                            setState(() {
-                                              _switch = status;
-                                            });
-                                          }),
-                                          */
                                       Container(
-                                        child: Text("Técnico"),
+                                        child: Text(
+                                          "Técnico",
+                                          style: GoogleFonts.lato(),),
                                         padding: EdgeInsets.all(8),
                                       ),
                                     ],
@@ -435,10 +446,12 @@ class _CadastroState extends State<Cadastro> {
                                           child: Center(
                                             child: Text(
                                               "Cadastrar",
-                                              style: TextStyle(
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold),
+                                              )
                                             ),
                                           ),
                                           decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/PessoaRepository.dart';
@@ -68,13 +69,16 @@ class _LoginState extends State<Login> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Padding(
                     padding: EdgeInsets.only(top: 30, bottom: 10),
                     child: Text(
                       "Helpdesk",
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.bold)),
                     ),
                   ),
                   Form(
@@ -85,9 +89,8 @@ class _LoginState extends State<Login> {
                             padding: EdgeInsets.all(8),
                             child: TextFormField(
                               keyboardType: TextInputType.emailAddress,
-                              style: TextStyle(
-                                  fontSize: 14),
                               decoration: InputDecoration(
+                                labelStyle: GoogleFonts.lato(),
                                 border: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       color: Color(0xff0088cc), width: 2),
@@ -114,6 +117,7 @@ class _LoginState extends State<Login> {
                             padding: EdgeInsets.all(8),
                             child: TextFormField(
                               decoration: InputDecoration(
+                                labelStyle: GoogleFonts.lato(),
                                 border: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       color: Color(0xff0088cc), width: 2),
@@ -145,15 +149,22 @@ class _LoginState extends State<Login> {
                               Padding(
                                   child: GestureDetector(
                                     child: Text(
-                                        "Não tem conta? Clique aqui para criar uma"),
+                                        "Não tem conta? Clique aqui para criar uma",
+                                        style: GoogleFonts.lato(
+                                          textStyle: TextStyle(
+                                          )
+                                        ),),
                                     onTap: () => Navigator.pushNamed(
                                         context, "/cadastro"),
                                   ),
                                   padding: EdgeInsets.only(top: 8, bottom: 8)),
                               GestureDetector(
-                                child: Text("Esqueceu sua senha? Clique aqui"),
+                                child: Text(
+                                  "Esqueceu sua senha? Clique aqui",
+                                  style: GoogleFonts.lato(
+                                  ),),
                                 onTap: () => Navigator.pushNamed(
-                                        context, "/esquecisenha"),
+                                    context, "/esquecisenha"),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 20, bottom: 20),
@@ -171,10 +182,12 @@ class _LoginState extends State<Login> {
                                       child: Center(
                                         child: Text(
                                           "Entrar",
-                                          style: TextStyle(
+                                          style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
                                               color: Colors.white,
                                               fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold)
+                                          ),
                                         ),
                                       ),
                                       decoration: BoxDecoration(

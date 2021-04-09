@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/util/PessoaFiltro.dart';
@@ -29,13 +30,19 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
 
   Text _tituloAppBar(){
     if(widget._pessoaFiltro.filtro == 1){
-      return Text("Ordens Criadas");
+      return Text(
+        "Ordens Criadas",
+        style: GoogleFonts.lato(),);
     }
     else if(widget._pessoaFiltro.filtro == 2){
-      return Text("Ordens em Andamento");
+      return Text(
+        "Ordens em Andamento",
+        style: GoogleFonts.lato());
     }
     else{
-      return Text("Ordens resolvidas");
+      return Text(
+        "Ordens resolvidas",
+        style: GoogleFonts.lato());
     }
   }
 
@@ -111,7 +118,9 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
                         case ConnectionState.waiting:
-                          return CircularProgressIndicator();
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
                           break;
                         case ConnectionState.active:
                         case ConnectionState.done:
@@ -137,12 +146,14 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    "Ordem ${ordem.idOrdem}",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
+                                                      "Ordem ${ordem.idOrdem}",
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )),
                                                 ),
                                                 padding: EdgeInsets.all(10),
                                               ),
@@ -151,13 +162,15 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     child: Text(
-                                                      "Título: ${ordem.titulo}",
-                                                      maxLines: 1,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
+                                                        "Título: ${ordem.titulo}",
+                                                        maxLines: 1,
+                                                        style: GoogleFonts.lato(
+                                                          textStyle: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ))),
                                                 padding: EdgeInsets.all(10),
                                               ),
                                               Padding(
@@ -166,10 +179,11 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
                                                         Alignment.centerLeft,
                                                     child: Text(
                                                       "Descrição: ${ordem.descricao}",
-                                                      maxLines: 5,
-                                                      style: TextStyle(
+                                                      maxLines: 2,
+                                                      style: GoogleFonts.lato(
+                                                          textStyle: TextStyle(
                                                         fontSize: 16,
-                                                      ),
+                                                      )),
                                                     )),
                                                 padding: EdgeInsets.all(10),
                                               ),
@@ -192,10 +206,12 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
                                                               .format(ordem
                                                                   .dataInicio),
                                                       maxLines: 1,
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight
-                                                              .normal),
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                          fontSize: 13,
+                                                          fontStyle: FontStyle.italic
+                                                          ),
+                                                      )
                                                     )),
                                                 padding: EdgeInsets.all(10),
                                               )
