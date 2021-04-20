@@ -35,7 +35,7 @@ class Pessoa {
       'email': email,
       'senha': senha,
       'foto': foto,
-      'tipoPessoa': tipoPessoa.toMap(),
+      'tipoPessoa': tipoPessoa == null ? null : tipoPessoa.toMap(),
     };
   }
 
@@ -46,7 +46,16 @@ class Pessoa {
     };
   }
 
+  Map<String, dynamic> toMapEsqueciSenha() {
+    return {
+      'email': email,
+      'cpf': cpf
+    };
+  }
+
   String toJsonLogin() => json.encode(toMapLogin());
+
+  String toJsonEsqueciSenha() => json.encode(toMapEsqueciSenha());
 
   factory Pessoa.fromMap(Map<String, dynamic> map) {
     return Pessoa(
@@ -58,7 +67,7 @@ class Pessoa {
       email: map['email'],
       senha: map['senha'],
       foto: map['foto'],
-      tipoPessoa: TipoPessoa.fromMap(map['tipoPessoa']),
+      tipoPessoa: map['tipoPessoa'] == null ? null : TipoPessoa.fromMap(map['tipoPessoa']),
     );
   }
 

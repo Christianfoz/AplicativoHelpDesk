@@ -23,13 +23,20 @@ class PessoaRepository {
     var _dio = CustomDio().instance;
     return await _dio
         .post("http://192.168.0.107:8080/pessoa", data: p.toJson())
-        .then((value) => value.data);
+        .then((value) => value.data).onError((error, stackTrace) => false);
     }
 
     Future<Pessoa> logarPessoa(Pessoa p) async{
       var _dio = CustomDio().instance;
       return await _dio.post("http://192.168.0.107:8080/pessoa/login",data: p.toJsonLogin())
-      .then((value) => Pessoa.fromMap(value.data));
+      .then((value) {
+        if(value.data == ""){
+          return null;
+        }
+        else{
+          return Pessoa.fromMap(value.data);
+        }
+      } );
     }
 
     Future<int> verificarQuantidadeChamado(int id) async {
@@ -37,5 +44,24 @@ class PessoaRepository {
     return await _dio
         .get("http://192.168.0.107:8080/pessoa/verificacaoChamado/$id")
         .then((value) => value.data);
+    }
+
+    Future<Pessoa> verificarEmailECpf(Pessoa p) async{
+      var _dio = CustomDio().instance;
+      return await _dio.post("http://192.168.0.107:8080/pessoa/verificarEmailECpf",data: p.toMapEsqueciSenha())
+      .then((value) {
+        if(value.data == ""){
+          return null;
+        }
+        else{
+          return Pessoa.fromMap(value.data);
+        }
+      });
+    }
+
+    Future<Pessoa> atualizarSenha(Pessoa p) async{
+      var _dio = CustomDio().instance;
+      return await _dio.post("http://192.168.0.107:8080/pessoa/atualizarSenha",data: p.toJson())
+      .then((value) => Pessoa.fromMap(value.data));
     }
   }

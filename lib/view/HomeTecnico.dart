@@ -65,11 +65,10 @@ class _HomeTecnicoState extends State<HomeTecnico> {
             IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () async {
-                  String res = await showSearch(
-                      context: context, delegate: CustomSearchDelegate());
-                  setState(() {
-                    _resultado = res;
-                  });
+                  await showSearch<String>(
+                    context: context,
+                    delegate: CustomSearchDelegate(widget._pessoa),
+                  );
                 }),
           ],
           title: Text(

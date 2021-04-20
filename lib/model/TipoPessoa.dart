@@ -28,7 +28,7 @@ class TipoPessoa {
     return {
       'idTipoPessoa': idTipoPessoa,
       'nomeTipoPessoa': nomeTipoPessoa,
-      'pessoas': pessoas?.map((x) => x.toMap())?.toList(),
+      'pessoas': pessoas == null ? null : pessoas?.map((x) => x.toMap())?.toList(),
     };
   }
 

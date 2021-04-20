@@ -22,8 +22,6 @@ class HomeCliente extends StatefulWidget {
 class _HomeClienteState extends State<HomeCliente> {
   final OrdemRepository _ordemRepository = OrdemRepository();
   final _controller = StreamController<List<Ordem>>.broadcast();
-  String _resultado = "";
-  List<Ordem> _ordens;
 
   Future<Stream<List<Ordem>>> _adicionarListener() async {
     Stream<List<Ordem>> stream =
@@ -71,9 +69,9 @@ class _HomeClienteState extends State<HomeCliente> {
             IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () async {
-                  final result = await showSearch<String>(
+                  await showSearch<String>(
                     context: context,
-                    delegate: CustomSearchDelegate(),
+                    delegate: CustomSearchDelegate(widget._pessoa),
                   );
                 }),
           ],

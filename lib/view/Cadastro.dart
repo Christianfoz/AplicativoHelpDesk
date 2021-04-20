@@ -44,6 +44,50 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
+   _dialogErro(){
+    showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              actions: [
+                TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: GoogleFonts.lato(),))
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Erro ao se cadastrar no sistema",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
+                        )
+                      ),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      "CPF e/ou Email ja podem ter sido cadastrados no sistema. Caso não seja o caso, tente novamente mais tarde.",
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14
+                        )
+                      ),
+                      ),
+                  )
+                ],
+              ),
+            );
+          },);
+  }
+
   _cadastrarPessoa() async {
     if (_switch) {
       _pessoa.tipoPessoa = TipoPessoa.alt(2, "Técnico");
@@ -53,16 +97,14 @@ class _CadastroState extends State<Cadastro> {
     if (_imagemSelecionada == null) {
       _pessoa.foto = "sem-foto.png";
     } else {
-      _mostrarDialogEsperando(context);
       String url = await _repository.enviarFoto(_imagemSelecionada);
       _pessoa.foto = url;
       await _repository.inserirPessoa(_pessoa).then((value) {
         if(value){
-          Navigator.pop(context);
           Navigator.pushReplacementNamed(context, "/login");
         }
         else{
-          Navigator.pop(context);
+          _dialogErro();
         }
       });
       

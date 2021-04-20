@@ -17,30 +17,86 @@ class _LoginState extends State<Login> {
 
   _mostrarDialogEsperando(context) {
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          content: new Row(
-            children: [
-              Container(
-                child: CircularProgressIndicator(),
-                padding: EdgeInsets.only(left: 5, right: 5),
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)
               ),
-              Container(child: Text("Entrando")),
-            ],
-          ),
-        );
-      },
-    );
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      "Entrando no sistema",
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14
+                        )
+                      ),
+                      ),
+                  )
+                ],
+              ),
+            );
+          },);
+  }
+
+  _dialogErro(){
+    showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              actions: [
+                TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: GoogleFonts.lato(),))
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Erro ao realizar login no sistema",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
+                        )
+                      ),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      "Email e/ou senha incorretos",
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14
+                        )
+                      ),
+                      ),
+                  )
+                ],
+              ),
+            );
+          },);
   }
 
   _login() async {
-    _mostrarDialogEsperando(context);
     Pessoa p = await _repository.logarPessoa(_pessoa);
-    Navigator.pop(context);
-    print("-------------" + p.tipoPessoa.nomeTipoPessoa);
-    if (p.tipoPessoa.nomeTipoPessoa == "Cliente") {
+    if(p == null){
+      _dialogErro();
+    }
+    else{
+      _mostrarDialogEsperando(context);
+      Navigator.pop(context);
+      if (p.tipoPessoa.nomeTipoPessoa == "Cliente") {
       Navigator.pushNamedAndRemoveUntil(
           context, "/homecliente", (Route<dynamic> route) => false,
           arguments: p);
@@ -49,6 +105,8 @@ class _LoginState extends State<Login> {
           context, "/hometecnico", (Route<dynamic> route) => false,
           arguments: p);
     }
+    }
+    
   }
 
   @override
