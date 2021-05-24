@@ -1,16 +1,9 @@
-# helpdesk
+Título: HelpDesk
 
-A new Flutter project.
+Nomes: Christian, Diogo Costa e Giovani
 
-## Getting Started
+Christian(TADS 2017), Giovani e Diogo(TADS 2018)
 
-This project is a starting point for a Flutter application.
+Aplicativo para Smartphones Android para criação e solução de chamados de TI. O aplicativo tem ferramentas para cadastro de clientes/técnicos, bem como realização de login para acesso ao sistema. Além disso, tem métodos para a criação dos chamados com seus respectivos dados. A ferramenta está sendo feita com Linguagem Dart utilizando Flutter Framework.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Este repositório abrange o código realizado para a construção do Aplicativo.
