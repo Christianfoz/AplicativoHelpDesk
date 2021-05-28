@@ -12,6 +12,7 @@ class Pessoa {
   String senha;
   String foto;
   TipoPessoa tipoPessoa;
+  bool validado;
   Pessoa({
     this.idPessoa,
     this.nome,
@@ -21,7 +22,8 @@ class Pessoa {
     this.email,
     this.senha,
     this.foto,
-    this.tipoPessoa
+    this.tipoPessoa,
+    this.validado
   });
   
 
@@ -36,6 +38,7 @@ class Pessoa {
       'senha': senha,
       'foto': foto,
       'tipoPessoa': tipoPessoa == null ? null : tipoPessoa.toMap(),
+      'validado' : validado == null ? null : validado
     };
   }
 
@@ -68,6 +71,7 @@ class Pessoa {
       senha: map['senha'],
       foto: map['foto'],
       tipoPessoa: map['tipoPessoa'] == null ? null : TipoPessoa.fromMap(map['tipoPessoa']),
+      validado: map['validado']
     );
   }
 

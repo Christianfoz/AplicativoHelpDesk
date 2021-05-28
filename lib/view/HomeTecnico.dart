@@ -7,6 +7,7 @@ import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/util/CustomSearchDelegate.dart';
+import 'package:helpdesk/util/PerfilUtil.dart';
 import 'package:helpdesk/util/PessoaFiltro.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -32,7 +33,12 @@ class _HomeTecnicoState extends State<HomeTecnico> {
     });
   }
 
-  abrirPerfil() {}
+  _abrirPerfil() {
+    PerfilUtil _perfilUtil =
+        PerfilUtil(pessoaLogada: widget._pessoa, pessoaPerfil: widget._pessoa);
+    Navigator.pop(context);
+    Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
+  }
 
   _detalharChamado(Ordem ordem) {
     PessoaOrdem _pessoaOrdem =
@@ -80,7 +86,7 @@ class _HomeTecnicoState extends State<HomeTecnico> {
           padding: EdgeInsets.zero,
           children: [
             GestureDetector(
-              onTap: () => abrirPerfil(),
+              onTap: () => _abrirPerfil(),
               child: UserAccountsDrawerHeader(
                 accountEmail: Text(
                   widget._pessoa.email,
@@ -151,7 +157,9 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                   textStyle: TextStyle(color: themeData.primaryColor)
                 )
               ),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                _abrirPerfil();
+              }
             ),
             ListTile(
                 leading: Icon(Icons.logout, color: themeData.primaryColor),

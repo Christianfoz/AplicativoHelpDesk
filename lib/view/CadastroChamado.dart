@@ -79,6 +79,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     _ordem.situacao = Situacao.alt(1, "Criada");
     _ordem.dataInicio = DateTime.now();
     _ordem.local = _local;
+    _ordem.status = true;
     if (_imagemSelecionada == null) {
       _ordem.imagem = "sem-imagem.png";
     } else {

@@ -91,8 +91,10 @@ class _CadastroState extends State<Cadastro> {
   _cadastrarPessoa() async {
     if (_switch) {
       _pessoa.tipoPessoa = TipoPessoa.alt(2, "Técnico");
+      _pessoa.validado = false;
     } else {
       _pessoa.tipoPessoa = TipoPessoa.alt(1, "Cliente");
+      _pessoa.validado = true;
     }
     if (_imagemSelecionada == null) {
       _pessoa.foto = "sem-foto.png";

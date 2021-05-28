@@ -7,6 +7,7 @@ import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/util/CustomSearchDelegate.dart';
+import 'package:helpdesk/util/PerfilUtil.dart';
 import 'package:helpdesk/util/PessoaFiltro.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -35,7 +36,11 @@ class _HomeClienteState extends State<HomeCliente> {
     Navigator.pushNamed(context, "/cadastrochamado", arguments: widget._pessoa);
   }
 
-  abrirPerfil() {}
+  _abrirPerfil() {
+    PerfilUtil _perfilUtil = PerfilUtil(pessoaLogada: widget._pessoa, pessoaPerfil: widget._pessoa);
+                Navigator.pop(context);
+                Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
+  }
 
   _detalharChamado(Ordem ordem) {
     PessoaOrdem _pessoaOrdem =
@@ -85,7 +90,7 @@ class _HomeClienteState extends State<HomeCliente> {
           padding: EdgeInsets.zero,
           children: [
             GestureDetector(
-              onTap: () => abrirPerfil(),
+              onTap: () => _abrirPerfil(),
               child: UserAccountsDrawerHeader(
                 accountEmail:
                     Text(widget._pessoa.email, style: GoogleFonts.lato()),
@@ -96,7 +101,7 @@ class _HomeClienteState extends State<HomeCliente> {
                 currentAccountPicture: CircleAvatar(
                     radius: 30,
                     backgroundImage: NetworkImage(
-                        "http://192.168.0.107:8080/${widget._pessoa.foto}")),
+                        "http://192.168.0.105:8080/${widget._pessoa.foto}")),
               ),
             ),
             ListTile(
@@ -153,7 +158,9 @@ class _HomeClienteState extends State<HomeCliente> {
               title: Text("Perfil",
                   style: GoogleFonts.lato(
                       textStyle: TextStyle(color: themeData.primaryColor))),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                _abrirPerfil();
+              } 
             ),
             ListTile(
                 leading: Icon(Icons.logout, color: themeData.primaryColor),

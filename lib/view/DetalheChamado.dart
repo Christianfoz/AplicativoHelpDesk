@@ -5,6 +5,7 @@ import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Situacao.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/repository/PessoaRepository.dart';
+import 'package:helpdesk/util/PerfilUtil.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,26 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   final _repository = PessoaRepository();
   final _ordemRepository = OrdemRepository();
   final _formKey = GlobalKey<FormState>();
+
+  _abrirPerfil(int id) {
+    //1 para clique em cliente
+    //2 para clique em tecnico
+    switch (id) {
+      case 1:
+        PerfilUtil _perfilUtil = PerfilUtil(
+            pessoaLogada: widget._pessoaOrdem.pessoa, pessoaPerfil: widget._pessoaOrdem.ordem.cliente);
+        Navigator.pop(context);
+        Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
+        break;
+      case 2:
+        PerfilUtil _perfilUtil = PerfilUtil(
+            pessoaLogada: widget._pessoaOrdem.pessoa, pessoaPerfil: widget._pessoaOrdem.ordem.tecnico);
+        Navigator.pop(context);
+        Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
+        break;
+      default:
+    }
+  }
 
   _dialogErro() {
     showDialog(
@@ -324,15 +345,13 @@ class _DetalheChamadoState extends State<DetalheChamado> {
             child: Container(
               padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
               child: Center(
-                child: Text(
-                  "Aceitar Chamado",
-                  style: GoogleFonts.lato(
-                    textStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  )
-                ),
+                child: Text("Aceitar Chamado",
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )),
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
@@ -355,15 +374,13 @@ class _DetalheChamadoState extends State<DetalheChamado> {
             child: Container(
               padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
               child: Center(
-                child: Text(
-                  "Finalizar Chamado",
-                  style: GoogleFonts.lato(
-                    textStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  )
-                ),
+                child: Text("Finalizar Chamado",
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )),
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
@@ -379,6 +396,55 @@ class _DetalheChamadoState extends State<DetalheChamado> {
     } else {
       return Container();
     }
+  }
+
+  _abrirDialogExclusao() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            content: Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        "Deseja realmente excluir o chamado?",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _ordemRepository
+                        .deletarChamado(widget._pessoaOrdem.ordem.idOrdem)
+                        .then((value) {
+                      if (value) {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/homecliente",
+                            arguments: widget._pessoaOrdem.pessoa);
+                      } else {
+                        _dialogErro();
+                      }
+                    });
+                  },
+                  child: Text("Sim")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Não"))
+            ]);
+      },
+    );
   }
 
   @override
@@ -433,10 +499,13 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                               Padding(
                                 padding:
                                     const EdgeInsets.only(right: 4, bottom: 8),
-                                child: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        "http://192.168.0.107:8080/${widget._pessoaOrdem.ordem.cliente.foto}"),
-                                    radius: 40),
+                                child: GestureDetector(
+                                  onTap: _abrirPerfil(1),
+                                  child: CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          "http://192.168.0.107:8080/${widget._pessoaOrdem.ordem.cliente.foto}"),
+                                      radius: 40),
+                                ),
                               ),
                               Padding(
                                 padding:
@@ -576,21 +645,39 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                   child: Align(
                                       alignment: Alignment.bottomLeft,
                                       child: Text(
-                                        "Chamado terminado em " +
-                                            DateFormat(
-                                                    DateFormat.YEAR_MONTH_DAY,
-                                                    'pt_Br')
-                                                .format(widget._pessoaOrdem
-                                                    .ordem.dataTermino) +
-                                            " as " +
-                                            DateFormat('HH:mm', 'pt_Br').format(
+                                          "Chamado terminado em " +
+                                              DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_Br')
+                                                  .format(widget._pessoaOrdem
+                                                      .ordem.dataTermino) +
+                                              " as " +
+                                              DateFormat('HH:mm', 'pt_Br')
+                                                  .format(widget._pessoaOrdem
+                                                      .ordem.dataTermino),
+                                          style: GoogleFonts.lato(
+                                              textStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight:
+                                                      FontWeight.normal)))),
+                                ),
+                          widget._pessoaOrdem.ordem.tecnico == null
+                              ? Container()
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: GestureDetector(
+                                        onTap: _abrirPerfil(2),
+                                        child: Text(
+                                            "Chamado atendido por " +
                                                 widget._pessoaOrdem.ordem
-                                                    .dataTermino),
-                                        style: GoogleFonts.lato(
-                                          textStyle: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.normal)
-                                        )
+                                                    .tecnico.nome +
+                                                widget._pessoaOrdem.ordem
+                                                    .tecnico.sobrenome,
+                                            style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.normal))),
                                       )),
                                 ),
                           Row(children: <Widget>[
@@ -604,8 +691,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                             Text(
                               "Imagem do Chamado",
                               style: GoogleFonts.lato(
-                                textStyle: TextStyle(fontSize: 16)
-                              ),
+                                  textStyle: TextStyle(fontSize: 16)),
                             ),
                             Expanded(
                                 child: Padding(
@@ -621,20 +707,145 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                 child: widget._pessoaOrdem.ordem.imagem ==
                                         "sem-imagem.png"
                                     ? Center(
-                                        child: Text(
-                                          "Sem imagem",
-                                          style: GoogleFonts.lato()),
+                                        child: Text("Sem imagem",
+                                            style: GoogleFonts.lato()),
                                       )
                                     : Container(
                                         padding: EdgeInsets.all(16),
                                         height: 200,
                                         width: 300,
                                         child: Image.network(
-                                          "http://192.168.0.107:8080/${widget._pessoaOrdem.ordem.imagem}",
+                                          "http://192.168.0.105:8080/${widget._pessoaOrdem.ordem.imagem}",
                                           fit: BoxFit.fill,
                                         ),
                                       )),
                           ),
+                          //verifica se o criador do chamado é o mesmo que está logado
+                          // se sim, aparecerá na tela opções de editar/excluir
+
+                          widget._pessoaOrdem.pessoa.idPessoa ==
+                                  widget._pessoaOrdem.ordem.cliente.idPessoa
+                              ? Column(
+                                  children: [
+                                    Row(children: <Widget>[
+                                      Expanded(
+                                          child: Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: Divider(
+                                          thickness: 2,
+                                        ),
+                                      )),
+                                      Text(
+                                        "Edição e Exclusão",
+                                        style: GoogleFonts.lato(
+                                            textStyle: TextStyle(fontSize: 16)),
+                                      ),
+                                      Expanded(
+                                          child: Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: Divider(
+                                          thickness: 2,
+                                        ),
+                                      ))
+                                    ]),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: Container(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  16, 8, 16, 8),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.edit,
+                                                      color: Colors.white),
+                                                  Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 4),
+                                                      child: Text("Editar",
+                                                          style:
+                                                              GoogleFonts.lato(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 18,
+                                                            ),
+                                                          )),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                    colors: [
+                                                      Color.fromRGBO(
+                                                          0, 128, 255, 1),
+                                                      Color.fromRGBO(
+                                                          51, 153, 255, 1)
+                                                    ]),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              // abre dialog confirmando exclusão
+                                              _abrirDialogExclusao();
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  16, 8, 16, 8),
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.delete,
+                                                      color: Colors.white),
+                                                  Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 4),
+                                                      child: Text(
+                                                        "Excluir",
+                                                        style: GoogleFonts.lato(
+                                                            textStyle:
+                                                                TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                        )),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                    colors: [
+                                                      Color.fromRGBO(
+                                                          0, 128, 255, 1),
+                                                      Color.fromRGBO(
+                                                          51, 153, 255, 1)
+                                                    ]),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
                           widget._pessoaOrdem.pessoa.tipoPessoa
                                       .nomeTipoPessoa ==
                                   "Técnico"
@@ -651,8 +862,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                       Text(
                                         "Opções de Técnico",
                                         style: GoogleFonts.lato(
-                                          textStyle: TextStyle(fontSize: 16)
-                                        ),
+                                            textStyle: TextStyle(fontSize: 16)),
                                       ),
                                       Expanded(
                                           child: Padding(
