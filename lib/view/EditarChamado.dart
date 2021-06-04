@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Local.dart';
 import 'package:helpdesk/model/Ordem.dart';
-import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/model/Situacao.dart';
 import 'package:helpdesk/repository/LocalRepository.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
@@ -13,18 +12,21 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:validadores/validadores.dart';
 
-class CadastroChamado extends StatefulWidget {
-  Pessoa _pessoa;
-  CadastroChamado(this._pessoa);
+import '../util/Ip.dart';
+import '../util/PessoaOrdem.dart';
+
+class EditarChamado extends StatefulWidget {
+  PessoaOrdem _pessoaOrdem;
+  EditarChamado(this._pessoaOrdem);
   @override
-  _CadastroChamadoState createState() => _CadastroChamadoState();
+  _EditarChamadoState createState() => _EditarChamadoState();
 }
 
-class _CadastroChamadoState extends State<CadastroChamado> {
+class _EditarChamadoState extends State<EditarChamado> {
   File _imagemSelecionada;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _typeAheadController = TextEditingController();
-  Ordem _ordem = Ordem();
+  Ordem _ordemEditada = Ordem();
   Local _local = Local.alt();
   final PessoaRepository _repository = PessoaRepository();
   final OrdemRepository _ordemRepository = OrdemRepository();
@@ -72,29 +74,25 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     }
   }
 
-  _cadastrarOrdem() async {
+  _editarOrdem() async {
     _mostrarDialogEsperando(context);
-    _ordem.cliente = widget._pessoa;
-    _ordem.dataInicio = DateTime.now().toUtc();
-    _ordem.situacao = Situacao.alt(1, "Criada");
-    _ordem.dataInicio = DateTime.now();
-    _ordem.local = _local;
-    _ordem.status = true;
     if (_imagemSelecionada == null) {
-      _ordem.imagem = "sem-imagem.png";
+      
     } else {
       String url = await _repository.enviarFoto(_imagemSelecionada);
-      _ordem.imagem = url;
+      _ordemEditada.imagem = url;
     }
-    await _ordemRepository.criarOrdem(_ordem);
+    await _ordemRepository.editarOrdem(_ordemEditada);
     Navigator.pop(context);
-    Navigator.pushNamed(context, "/homecliente",arguments: widget._pessoa);
+    Navigator.pushNamed(context, "/homecliente",arguments: widget._pessoaOrdem.pessoa);
   }
 
-  @override
+   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _ordemEditada = widget._pessoaOrdem.ordem;
+
   }
 
   @override
@@ -130,6 +128,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                   Container(
                                     padding: EdgeInsets.all(8),
                                     child: TextFormField(
+                                      initialValue: widget._pessoaOrdem.ordem.titulo,
                                     keyboardType: TextInputType.name,
                                     decoration: InputDecoration(
                                       labelStyle: GoogleFonts.lato(),
@@ -144,7 +143,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                         labelText: "Título",
                                       ),
                                     onSaved: (String titulo) =>
-                                        _ordem.titulo = titulo,
+                                        _ordemEditada.titulo = titulo,
                                     validator: (titulo) {
                                       return Validador()
                                           .add(Validar.OBRIGATORIO,
@@ -157,6 +156,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                   Container(
                                     padding: EdgeInsets.all(8),
                                     child: TextFormField(
+                                      initialValue: widget._pessoaOrdem.ordem.descricao,
                                     maxLines: null,
                                     keyboardType: TextInputType.name,
                                     decoration: InputDecoration(
@@ -172,7 +172,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                         labelText: "Descricao",
                                       ),
                                     onSaved: (String descricao) =>
-                                        _ordem.descricao = descricao,
+                                        _ordemEditada.descricao = descricao,
                                     validator: (descricao) {
                                       return Validador()
                                           .add(Validar.OBRIGATORIO,
@@ -254,8 +254,8 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                     height: 200,
                                     width: 300,
                                     child: _imagemSelecionada == null
-                                        ? Image.asset(
-                                            "imagens/sem-imagem.png",
+                                        ? Image.network(
+                                            Ip.ip + "${widget._pessoaOrdem.ordem.imagem}",
                                             fit: BoxFit.fill,
                                           )
                                         : Image.file(
@@ -342,7 +342,7 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                                           if (_formKey.currentState
                                               .validate()) {
                                             _formKey.currentState.save();
-                                            _cadastrarOrdem();
+                                            _editarOrdem();
                                           }
                                         },
                                         child: Container(
@@ -380,4 +380,3 @@ class _CadastroChamadoState extends State<CadastroChamado> {
                     )))));
   }
 }
-

@@ -98,7 +98,7 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                 currentAccountPicture: CircleAvatar(
                     radius: 30,
                     backgroundImage: NetworkImage(
-                        "http://192.168.0.107:8080/${widget._pessoa.foto}")),
+                        "http://192.168.0.105:8080/${widget._pessoa.foto}")),
               ),
             ),
             ListTile(

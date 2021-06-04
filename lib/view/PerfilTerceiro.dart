@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/model/Ordem.dart';
-import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/util/Ip.dart';
 import 'package:helpdesk/util/PerfilUtil.dart';
@@ -225,8 +224,7 @@ class _PerfilState extends State<PerfilTerceiro> {
                           ]),
                           // verifica se é técnico, caso seja não aparecerá a parte de seção de chamados criados
                           widget._perfilUtil.pessoaPerfil.tipoPessoa
-                                      .nomeTipoPessoa ==
-                                  "Técnico"
+                                      .nomeTipoPessoa =="Técnico"
                               ? Container()
                               : StreamBuilder(
                                       builder: (context,

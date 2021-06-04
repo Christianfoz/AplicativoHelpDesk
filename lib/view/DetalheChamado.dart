@@ -23,6 +23,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   final _ordemRepository = OrdemRepository();
   final _formKey = GlobalKey<FormState>();
 
+  _abrirTelaEdicaoChamado(){
+    Navigator.pushNamed(context, "/editarchamado",arguments: widget._pessoaOrdem);
+  }
+
   _abrirPerfil(int id) {
     //1 para clique em cliente
     //2 para clique em tecnico
@@ -336,7 +340,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   }
 
   Widget _verificarSituacao() {
-    if (widget._pessoaOrdem.ordem.situacao.nomeSituacao == "Criada") {
+    if (widget._pessoaOrdem.ordem.situacao.nomeSituacao == "Criado") {
       return Padding(
         padding: EdgeInsets.only(top: 20, bottom: 20),
         child: Center(
@@ -500,10 +504,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                 padding:
                                     const EdgeInsets.only(right: 4, bottom: 8),
                                 child: GestureDetector(
-                                  onTap: _abrirPerfil(1),
+                                  onTap: () => _abrirPerfil(1),
                                   child: CircleAvatar(
                                       backgroundImage: NetworkImage(
-                                          "http://192.168.0.107:8080/${widget._pessoaOrdem.ordem.cliente.foto}"),
+                                          "http://192.168.0.105:8080/${widget._pessoaOrdem.ordem.cliente.foto}"),
                                       radius: 40),
                                 ),
                               ),
@@ -666,11 +670,11 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                   child: Align(
                                       alignment: Alignment.bottomLeft,
                                       child: GestureDetector(
-                                        onTap: _abrirPerfil(2),
+                                        onTap: () => _abrirPerfil(2),
                                         child: Text(
                                             "Chamado atendido por " +
                                                 widget._pessoaOrdem.ordem
-                                                    .tecnico.nome +
+                                                    .tecnico.nome + " " +
                                                 widget._pessoaOrdem.ordem
                                                     .tecnico.sobrenome,
                                             style: GoogleFonts.lato(
@@ -724,7 +728,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                           // se sim, aparecerá na tela opções de editar/excluir
 
                           widget._pessoaOrdem.pessoa.idPessoa ==
-                                  widget._pessoaOrdem.ordem.cliente.idPessoa
+                                  widget._pessoaOrdem.ordem.cliente.idPessoa && widget._pessoaOrdem.ordem.situacao.nomeSituacao == "Criado"
                               ? Column(
                                   children: [
                                     Row(children: <Widget>[
@@ -755,7 +759,9 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              _abrirTelaEdicaoChamado();
+                                            },
                                             child: Container(
                                               padding: EdgeInsets.fromLTRB(
                                                   16, 8, 16, 8),

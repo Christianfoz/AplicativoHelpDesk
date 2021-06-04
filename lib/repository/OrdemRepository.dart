@@ -9,6 +9,13 @@ class OrdemRepository {
         .then((value) => value.data);
   }
 
+   Future<bool> editarOrdem(Ordem p) async {
+    var _dio = CustomDio().instance;
+    return await _dio
+        .put("http://192.168.0.105:8080/ordem/", data: p.toJson())
+        .then((value) => value.data);
+  }
+
   Future<bool> atualizarEstadoParaEmProgresso(Ordem p) async {
     var _dio = CustomDio().instance;
     return await _dio

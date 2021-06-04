@@ -3,6 +3,7 @@ import 'package:helpdesk/util/PerfilUtil.dart';
 import 'package:helpdesk/view/Cadastro.dart';
 import 'package:helpdesk/view/CadastroChamado.dart';
 import 'package:helpdesk/view/DetalheChamado.dart';
+import 'package:helpdesk/view/EditarChamado.dart';
 import 'package:helpdesk/view/EsqueciSenha.dart';
 import 'package:helpdesk/view/HomeCliente.dart';
 import 'package:helpdesk/view/HomeTecnico.dart';
@@ -40,6 +41,9 @@ class RouteGen {
         break;
       case "/perfil":
         return MaterialPageRoute(builder: (context) => PerfilTerceiro(args));
+        break;
+      case "/editarchamado":
+        return MaterialPageRoute(builder: (context) => EditarChamado(args));
         break;
     }
   }
