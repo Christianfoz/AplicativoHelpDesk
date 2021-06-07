@@ -1,7 +1,17 @@
+/*
+
+---------------------------------------------------------
+
+
+Classe Situação com atributos e métodos
+
+
+----------------------------------------------------------
+
+*/
+
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-
 import 'package:helpdesk/model/Ordem.dart';
 
 class Situacao {

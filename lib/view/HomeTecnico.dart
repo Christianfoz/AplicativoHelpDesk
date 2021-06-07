@@ -23,7 +23,6 @@ class HomeTecnico extends StatefulWidget {
 class _HomeTecnicoState extends State<HomeTecnico> {
   final OrdemRepository _ordemRepository = OrdemRepository();
   final _controller = StreamController<List<Ordem>>.broadcast();
-  String _resultado = "";
 
   Future<Stream<List<Ordem>>> _adicionarListener() async {
     Stream<List<Ordem>> stream =

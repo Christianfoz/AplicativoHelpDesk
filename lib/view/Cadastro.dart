@@ -24,6 +24,16 @@ class _CadastroState extends State<Cadastro> {
   Pessoa _pessoa = Pessoa();
   final PessoaRepository _repository = PessoaRepository();
 
+/*------------------------------------------------------------------------------------
+
+
+  dialog de espera enquanto os dados são enviados para o back, passa num instante.
+
+
+  ------------------------------------------------------------------------------------
+*/
+
+
   _mostrarDialogEsperando(context) {
     showDialog(
       context: context,
@@ -44,13 +54,46 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
+  /*------------------------------------------------------------------------------------
+
+
+  dialog de erro caso algo dê errado
+
+
+  ------------------------------------------------------------------------------------
+  */
+
    _dialogErro(){
     showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               actions: [
-                TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: GoogleFonts.lato(),))
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    child: Center(
+                      child: Text(
+                        "Ok",
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Color.fromRGBO(0, 128, 255, 1),
+                        Color.fromRGBO(51, 153, 255, 1)
+                      ]),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
               ],
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20)
@@ -88,6 +131,15 @@ class _CadastroState extends State<Cadastro> {
           },);
   }
 
+  /*------------------------------------------------------------------------------------
+
+
+    Método para cadastrar a pessoa. Chamado caso o formulário seja validado
+
+
+  ------------------------------------------------------------------------------------
+*/
+
   _cadastrarPessoa() async {
     if (_switch) {
       _pessoa.tipoPessoa = TipoPessoa.alt(2, "Técnico");
@@ -124,6 +176,16 @@ class _CadastroState extends State<Cadastro> {
     Navigator.pop(context);
   }
 
+/*------------------------------------------------------------------------------------
+
+
+    Método para tirar foto a partir da camera do celular
+
+
+  ------------------------------------------------------------------------------------
+*/
+
+
   _tirarFotoCamera() async {
     final pickedFile =
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
@@ -135,6 +197,18 @@ class _CadastroState extends State<Cadastro> {
     }
   }
 
+
+/*------------------------------------------------------------------------------------
+
+
+    Método para escolher foto a partir da galeria do celular
+
+
+  ------------------------------------------------------------------------------------
+*/
+
+
+
   _tirarFotoGaleria() async {
     final pickedFile =
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
@@ -145,6 +219,15 @@ class _CadastroState extends State<Cadastro> {
       });
     }
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+    Método build para construir tela
+
+
+  ------------------------------------------------------------------------------------
+*/
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,18 @@
+/*
+
+---------------------------------------------------------
+
+
+Classe TipoPessoa com atributos e métodos
+
+
+----------------------------------------------------------
+
+*/
+
+
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-
 import 'package:helpdesk/model/Pessoa.dart';
 
 class TipoPessoa {

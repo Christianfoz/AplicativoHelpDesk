@@ -32,9 +32,29 @@ class _HomeClienteState extends State<HomeCliente> {
     });
   }
 
+  /*------------------------------------------------------------------------------------
+
+
+  Método para abrir tela de abertura de chamado
+
+
+  ------------------------------------------------------------------------------------
+  */
+
   _abrirTelaChamado() {
     Navigator.pushNamed(context, "/cadastrochamado", arguments: widget._pessoa);
   }
+
+ /*------------------------------------------------------------------------------------
+
+
+  Método para abrir tela de perfil do usuário logado. Pode ser chamado ao clicar na foto ali no drawer
+  ou na opção perfil dentro do drawer
+
+
+  ------------------------------------------------------------------------------------
+  */
+
 
   _abrirPerfil() {
     PerfilUtil _perfilUtil = PerfilUtil(pessoaLogada: widget._pessoa, pessoaPerfil: widget._pessoa);
@@ -42,11 +62,32 @@ class _HomeClienteState extends State<HomeCliente> {
                 Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
   }
 
+
+ /*------------------------------------------------------------------------------------
+
+
+  Método para abrir tela de detalhe de chamado
+
+
+  ------------------------------------------------------------------------------------
+*/
+
+
+
   _detalharChamado(Ordem ordem) {
     PessoaOrdem _pessoaOrdem =
         PessoaOrdem(pessoa: widget._pessoa, ordem: ordem);
     Navigator.pushNamed(context, "/detalhechamado", arguments: _pessoaOrdem);
   }
+
+ /*------------------------------------------------------------------------------------
+
+
+  Método para colorir card do chamado com base em sua situação
+
+
+  ------------------------------------------------------------------------------------
+*/
 
   Color _verCor(Ordem ordem) {
     if (ordem.situacao.idSituacao == 1) {
@@ -58,12 +99,31 @@ class _HomeClienteState extends State<HomeCliente> {
     }
   }
 
+/*------------------------------------------------------------------------------------
+
+
+  initstate para adicionar listener
+
+
+  ------------------------------------------------------------------------------------
+*/
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _adicionarListener();
   }
+
+/*------------------------------------------------------------------------------------
+
+
+  método build para construir tela
+
+
+  ------------------------------------------------------------------------------------
+*/
+
 
   @override
   Widget build(BuildContext context) {

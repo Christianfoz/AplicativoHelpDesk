@@ -1,5 +1,16 @@
-import 'dart:async';
+/*
+------------------------------------------------------------------------
 
+
+Classe com a tela de splash screen
+
+
+------------------------------------------------------------------------
+
+*/
+
+
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/view/Login.dart';

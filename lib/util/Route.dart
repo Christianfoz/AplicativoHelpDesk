@@ -1,5 +1,19 @@
+/*
+
+-----------------------------------------------
+
+
+Classe de rotas das telas do aplicativo. Util para deixar organizado o código
+
+
+-------------------------------------------------
+
+
+*/
+
+
+
 import 'package:flutter/material.dart';
-import 'package:helpdesk/util/PerfilUtil.dart';
 import 'package:helpdesk/view/Cadastro.dart';
 import 'package:helpdesk/view/CadastroChamado.dart';
 import 'package:helpdesk/view/DetalheChamado.dart';

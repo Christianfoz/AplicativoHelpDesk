@@ -1,5 +1,16 @@
-import 'dart:convert';
+/*
 
+---------------------------------------------------------
+
+
+Classe Ordem com atributos e métodos
+
+
+----------------------------------------------------------
+
+*/
+
+import 'dart:convert';
 import 'package:helpdesk/model/Local.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/model/Situacao.dart';

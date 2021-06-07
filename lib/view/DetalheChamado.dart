@@ -23,9 +23,30 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   final _ordemRepository = OrdemRepository();
   final _formKey = GlobalKey<FormState>();
 
-  _abrirTelaEdicaoChamado(){
-    Navigator.pushNamed(context, "/editarchamado",arguments: widget._pessoaOrdem);
+  /*------------------------------------------------------------------------------------
+
+
+  Método para tela de edição do chamado
+
+
+  ------------------------------------------------------------------------------------
+
+  */
+
+  _abrirTelaEdicaoChamado() {
+    Navigator.pushNamed(context, "/editarchamado",
+        arguments: widget._pessoaOrdem);
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Abre tela de perfil caso o usuário clique na foto do criador do perfil ou do tecnico
+
+
+  ------------------------------------------------------------------------------------
+
+  */
 
   _abrirPerfil(int id) {
     //1 para clique em cliente
@@ -33,19 +54,32 @@ class _DetalheChamadoState extends State<DetalheChamado> {
     switch (id) {
       case 1:
         PerfilUtil _perfilUtil = PerfilUtil(
-            pessoaLogada: widget._pessoaOrdem.pessoa, pessoaPerfil: widget._pessoaOrdem.ordem.cliente);
+            pessoaLogada: widget._pessoaOrdem.pessoa,
+            pessoaPerfil: widget._pessoaOrdem.ordem.cliente);
         Navigator.pop(context);
         Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
         break;
       case 2:
         PerfilUtil _perfilUtil = PerfilUtil(
-            pessoaLogada: widget._pessoaOrdem.pessoa, pessoaPerfil: widget._pessoaOrdem.ordem.tecnico);
+            pessoaLogada: widget._pessoaOrdem.pessoa,
+            pessoaPerfil: widget._pessoaOrdem.ordem.tecnico);
         Navigator.pop(context);
         Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
         break;
       default:
     }
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Dialog de erro
+
+
+  ------------------------------------------------------------------------------------
+
+  */
+
 
   _dialogErro() {
     showDialog(
@@ -72,25 +106,58 @@ class _DetalheChamadoState extends State<DetalheChamado> {
             ),
           ),
           actions: [
-            Center(
-                child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, "/hometecnico",
-                          arguments: widget._pessoaOrdem.pessoa);
-                    },
-                    child: Text("OK")))
+            GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/hometecnico",arguments: widget._pessoaOrdem.pessoa);
+                },
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                  child: Center(
+                    child: Text(
+                      "Ok",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color.fromRGBO(0, 128, 255, 1),
+                      Color.fromRGBO(51, 153, 255, 1)
+                    ]),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
           ],
         );
       },
     );
   }
 
+  /*------------------------------------------------------------------------------------
+
+
+  Esta dialog só aparecerá caso o técnico tenha mais de 3 chamados em andamento
+
+
+  ------------------------------------------------------------------------------------
+
+  */
+
   _dialogExcedido() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+          title: Center(
+            child: Text("Erro ao aceitar chamado",style: GoogleFonts.lato(),),
+          ),
             content: Container(
               padding: EdgeInsets.all(16),
               child: Column(
@@ -100,18 +167,8 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
                       child: Text(
-                        "Erro ao aceitar chamado",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
                         "Você excedeu o limite de 3 chamados aceitos por técnico. Termine os outros chamados e tente novamente",
-                        style: TextStyle(fontWeight: FontWeight.normal),
+                        style: GoogleFonts.lato(),
                       ),
                     ),
                   ),
@@ -119,24 +176,60 @@ class _DetalheChamadoState extends State<DetalheChamado> {
               ),
             ),
             actions: [
-              Center(
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, "/hometecnico",
-                            arguments: widget._pessoaOrdem.pessoa);
-                      },
-                      child: Text("OK")))
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/hometecnico",arguments: widget._pessoaOrdem.pessoa);
+                },
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                  child: Center(
+                    child: Text(
+                      "Ok",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color.fromRGBO(0, 128, 255, 1),
+                      Color.fromRGBO(51, 153, 255, 1)
+                    ]),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
             ]);
       },
     );
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Esta dialog aparecerá caso o técnico queira finalizar o chamado porém ele não foi o que aceitou antes
+
+
+  ------------------------------------------------------------------------------------
+
+  */
 
   _dialogErroFinalizar() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+            title: Center(
+              child: Text(
+                "Erro ao realizar ação",
+                style: GoogleFonts.lato(),
+              ),
+            ),
             content: Container(
               padding: EdgeInsets.all(16),
               child: Column(
@@ -156,53 +249,97 @@ class _DetalheChamadoState extends State<DetalheChamado> {
               ),
             ),
             actions: [
-              Center(
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("OK")))
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                  child: Center(
+                    child: Text(
+                      "Ok",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color.fromRGBO(0, 128, 255, 1),
+                      Color.fromRGBO(51, 153, 255, 1)
+                    ]),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
             ]);
       },
     );
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Dialog aparecerá quando alguma ação der certo. A dialog da ALEGRIA
+
+
+  ------------------------------------------------------------------------------------
+
+  */
 
   _dialogSucesso() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-            content: Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        "Operação realizada com sucesso",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
+            title: Center(
+              child: Text("Operação realizada com sucesso",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/hometecnico",arguments: widget._pessoaOrdem.pessoa);
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: Center(
+                    child: Text(
+                      "Ok",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
                     ),
                   ),
-                ],
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color.fromRGBO(0, 128, 255, 1),
+                      Color.fromRGBO(51, 153, 255, 1)
+                    ]),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
-            ),
-            actions: [
-              Center(
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, "/hometecnico",
-                            arguments: widget._pessoaOrdem.pessoa);
-                      },
-                      child: Text("OK")))
             ]);
       },
     );
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método para atualizar o chamado de criado para em andamento
+
+
+  ------------------------------------------------------------------------------------
+
+  */
 
   Widget _atualizarSituacaoEmProgresso(Ordem ordem) {
     _ordemRepository.atualizarEstadoParaEmProgresso(ordem).then((value) {
@@ -215,6 +352,16 @@ class _DetalheChamadoState extends State<DetalheChamado> {
       return _dialogErro();
     });
   }
+
+ /*------------------------------------------------------------------------------------
+
+
+  Método para abrir dialog para inserção do campo solução pelo tecnico
+
+
+  ------------------------------------------------------------------------------------
+
+*/
 
   _alertInserirSolucao() {
     showDialog(
@@ -304,6 +451,18 @@ class _DetalheChamadoState extends State<DetalheChamado> {
     );
   }
 
+ /*------------------------------------------------------------------------------------
+
+
+  Método para atualizar o chamado de em andamento para resolvido. Chamado pelo método abrirTelaSolucao caso tudo esteja
+  certo
+
+
+  ------------------------------------------------------------------------------------
+
+*/
+
+
   _finalizarChamado() {
     Ordem _ordem = widget._pessoaOrdem.ordem;
     if (_ordem.tecnico.idPessoa != widget._pessoaOrdem.ordem.tecnico.idPessoa) {
@@ -322,6 +481,15 @@ class _DetalheChamadoState extends State<DetalheChamado> {
     }
   }
 
+  /*------------------------------------------------------------------------------------
+
+
+  Método para verificar quantos chamados em andamento o técnico possue. Chamado pelo atualizarsituacaoemprogresso
+
+  ------------------------------------------------------------------------------------
+
+*/
+
   _verificaQuantidadeChamados() {
     _repository
         .verificarQuantidadeChamado(widget._pessoaOrdem.pessoa.idPessoa)
@@ -338,6 +506,15 @@ class _DetalheChamadoState extends State<DetalheChamado> {
       }
     });
   }
+
+/*------------------------------------------------------------------------------------
+
+
+  Método para verificar situação do chamado para que o texto do botão seja trocado ou que o botão nem apareça
+
+  ------------------------------------------------------------------------------------
+
+*/
 
   Widget _verificarSituacao() {
     if (widget._pessoaOrdem.ordem.situacao.nomeSituacao == "Criado") {
@@ -402,11 +579,25 @@ class _DetalheChamadoState extends State<DetalheChamado> {
     }
   }
 
+/*------------------------------------------------------------------------------------
+
+
+  Método para abrir dialog da exclusão
+
+------------------------------------------------------------------------------------
+
+*/
+
   _abrirDialogExclusao() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+            title: Center(
+                child: Text(
+              "Exclusão de chamado",
+              style: GoogleFonts.lato(),
+            )),
             content: Container(
               padding: EdgeInsets.all(16),
               child: Column(
@@ -416,9 +607,9 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
                       child: Text(
-                        "Deseja realmente excluir o chamado?",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        "Deseja realmente excluir o chamado? Você não poderá reverter após esta ação.",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
@@ -426,30 +617,79 @@ class _DetalheChamadoState extends State<DetalheChamado> {
               ),
             ),
             actions: [
-              TextButton(
-                  onPressed: () {
-                    _ordemRepository
-                        .deletarChamado(widget._pessoaOrdem.ordem.idOrdem)
-                        .then((value) {
-                      if (value) {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, "/homecliente",
-                            arguments: widget._pessoaOrdem.pessoa);
-                      } else {
-                        _dialogErro();
-                      }
-                    });
-                  },
-                  child: Text("Sim")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("Não"))
+              GestureDetector(
+                onTap: () {
+                  _ordemRepository
+                      .deletarChamado(widget._pessoaOrdem.ordem.idOrdem)
+                      .then((value) {
+                    if (value) {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, "/homecliente",
+                          arguments: widget._pessoaOrdem.pessoa);
+                    } else {
+                      _dialogErro();
+                    }
+                  });
+                },
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                  child: Center(
+                    child: Text(
+                      "Sim",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color.fromRGBO(0, 128, 255, 1),
+                      Color.fromRGBO(51, 153, 255, 1)
+                    ]),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                  child: Center(
+                    child: Text(
+                      "Não",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: themeData.primaryColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: themeData.primaryColor)),
+                ),
+              ),
             ]);
       },
     );
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método build para criar tela
+
+  ------------------------------------------------------------------------------------
+
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -626,6 +866,15 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                               ),
                             ),
                           ),
+
+                            /*------------------------------------------------------------------------------------
+
+
+                              Verifica se há solução. Se sim mostra, ao contrário ele não mostra
+
+                            ------------------------------------------------------------------------------------
+
+                            */
                           widget._pessoaOrdem.ordem.solucao == null
                               ? Container()
                               : Padding(
@@ -642,6 +891,15 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                         )),
                                   ),
                                 ),
+
+                            /*------------------------------------------------------------------------------------
+
+
+                              Verifica se há data de término. Se sim mostra, ao contrário ele não mostra
+
+                            ------------------------------------------------------------------------------------
+
+                            */
                           widget._pessoaOrdem.ordem.dataTermino == null
                               ? Container()
                               : Padding(
@@ -663,6 +921,14 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                                   fontWeight:
                                                       FontWeight.normal)))),
                                 ),
+                            /*------------------------------------------------------------------------------------
+
+
+                              Verifica se há técnico no chamado. Se sim mostra, ao contrário ele não mostra
+
+                            ------------------------------------------------------------------------------------
+
+                            */
                           widget._pessoaOrdem.ordem.tecnico == null
                               ? Container()
                               : Padding(
@@ -674,7 +940,8 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                         child: Text(
                                             "Chamado atendido por " +
                                                 widget._pessoaOrdem.ordem
-                                                    .tecnico.nome + " " +
+                                                    .tecnico.nome +
+                                                " " +
                                                 widget._pessoaOrdem.ordem
                                                     .tecnico.sobrenome,
                                             style: GoogleFonts.lato(
@@ -728,7 +995,11 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                           // se sim, aparecerá na tela opções de editar/excluir
 
                           widget._pessoaOrdem.pessoa.idPessoa ==
-                                  widget._pessoaOrdem.ordem.cliente.idPessoa && widget._pessoaOrdem.ordem.situacao.nomeSituacao == "Criado"
+                                      widget._pessoaOrdem.ordem.cliente
+                                          .idPessoa &&
+                                  widget._pessoaOrdem.ordem.situacao
+                                          .nomeSituacao ==
+                                      "Criado"
                               ? Column(
                                   children: [
                                     Row(children: <Widget>[

@@ -21,6 +21,17 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
   Pessoa _pessoaPesquisa;
   final PessoaRepository _repository = PessoaRepository();
 
+/*------------------------------------------------------------------------------------
+
+
+  Método para gerar um número aleatório de 6 digitos, envia a senha para ser criptografada no banco. 
+  Mostra dialog com sucesso
+
+
+
+------------------------------------------------------------------------------------
+*/
+
   _geracaoSenha() async {
     int min = 100000;
     int max = 999999;
@@ -28,34 +39,54 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
     var rNum = min + randomizer.nextInt(max - min);
     String senha = rNum.toString();
     _pessoa.senha = senha;
-    print("*************");
-    print("Pessoa" + _pessoa.toJson());
     await _repository.atualizarSenha(_pessoa).then((value) {
       if (value != null) {
         showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
-              content: Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
+              title: Center(
+                child: Text(
+                  "Sucesso ao gerar senha",
+                  style: GoogleFonts.lato(),
+                  ),),
+              actions: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, "/login");
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                    child: Center(
                       child: Text(
-                        "Sucesso ao gerar senha",
+                        "Ok",
                         style: GoogleFonts.lato(
                             textStyle: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
                       ),
                     ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Color.fromRGBO(0, 128, 255, 1),
+                        Color.fromRGBO(51, 153, 255, 1)
+                      ]),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
+              content: Container(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                child:
                     Text(
                       "Sua nova senha é: $rNum",
                       style: GoogleFonts.lato(),
                     )
-                  ],
-                ),
               ),
             );
           },
@@ -65,6 +96,34 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
           context: context,
           builder: (context) {
             return AlertDialog(
+              actions: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                    child: Center(
+                      child: Text(
+                        "Ok",
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Color.fromRGBO(0, 128, 255, 1),
+                        Color.fromRGBO(51, 153, 255, 1)
+                      ]),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
               content: Container(
                 padding: EdgeInsets.all(8),
                 child: Column(
@@ -79,7 +138,8 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
                     ),
                     Text(
                       "Tente novamente mais tarde",
-                      style: GoogleFonts.lato(),)
+                      style: GoogleFonts.lato(),
+                    )
                   ],
                 ),
               ),
@@ -90,42 +150,89 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
     });
   }
 
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método para verificar se existe o usuário com o cpf e email digitado.
+  Mostra dialog de erro caso não encontre o usuário
+
+
+  ------------------------------------------------------------------------------------
+  */
+
+
   _verificarUsuario() async {
     await _repository.verificarEmailECpf(_pessoaPesquisa).then((value) {
       _pessoa = value;
-      if(value == null){
+      if (value == null) {
         showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
+              title: Center(
+                child: Text("Erro ao buscar usuário",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold))),
+              ),
+              actions: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                    child: Center(
+                      child: Text(
+                        "Ok",
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Color.fromRGBO(0, 128, 255, 1),
+                        Color.fromRGBO(51, 153, 255, 1)
+                      ]),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
               content: Container(
                 padding: EdgeInsets.all(8),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("Erro ao buscar usuário",
-                          style: GoogleFonts.lato(
-                              textStyle: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold))),
-                    ),
                     Text(
                       "Não foi encontrado nenhum usuário com esses dados em nosso sistema",
-                      style: GoogleFonts.lato(),)
+                      style: GoogleFonts.lato(),
+                    )
                   ],
                 ),
               ),
             );
           },
         );
+      } else {
+        _geracaoSenha();
       }
-      else {
-       _geracaoSenha();
-    }
     });
-   
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método initstate para criar objeto auxiliar
+
+
+------------------------------------------------------------------------------------
+  */
 
   @override
   void initState() {
@@ -134,6 +241,16 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
     _pessoa = Pessoa();
     _pessoaPesquisa = Pessoa();
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método build para construir tela
+
+
+------------------------------------------------------------------------------------
+  */
+
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +297,8 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
                               Container(
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
-                                  onSaved: (String cpf) => _pessoaPesquisa.cpf = cpf,
+                                  onSaved: (String cpf) =>
+                                      _pessoaPesquisa.cpf = cpf,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
                                     CpfInputFormatter()
@@ -220,7 +338,8 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
                                     prefixIcon: Icon(Icons.email),
                                     labelText: "E-mail",
                                   ),
-                                  onSaved: (email) => _pessoaPesquisa.email = email,
+                                  onSaved: (email) =>
+                                      _pessoaPesquisa.email = email,
                                   validator: (valorEmail) {
                                     return Validador()
                                         .add(Validar.EMAIL,

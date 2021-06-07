@@ -2,6 +2,21 @@ import 'package:helpdesk/model/Local.dart';
 import 'package:helpdesk/util/Dio.dart';
 
 class LocalRepository{
+
+  /*
+
+  ------------------------------------
+
+
+  Métodos utilizando a biblioteca dio para comunicação com o back end
+
+
+  -------------------------------------
+
+  
+  */
+
+  // lista locais.
   
   Future<List<Local>> listarLocais() async{
     var _dio = CustomDio().instance;
@@ -10,6 +25,8 @@ class LocalRepository{
           as List<Local>;
       } );
     }
+
+    // lista locais por letra digitada
 
   Future<List<Local>> listarLocaisPorPalavra(String pesquisa) async{
     var _dio = CustomDio().instance;

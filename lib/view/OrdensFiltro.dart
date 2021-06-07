@@ -19,6 +19,16 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
   final OrdemRepository _ordemRepository = OrdemRepository();
   final _controller = StreamController<List<Ordem>>.broadcast();
 
+  /*------------------------------------------------------------------------------------
+
+  
+  Listener para "escutar" caso haja alguma mudança na lista de chamados
+
+
+  ------------------------------------------------------------------------------------
+
+  */
+
    Future<Stream<List<Ordem>>> _adicionarListener() async {
     Stream<List<Ordem>> stream =
         Stream.fromFuture(_ordemRepository.listarOrdensPorSituacao(widget._pessoaFiltro.filtro));
@@ -27,6 +37,16 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
       print(event);
     });
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método para mudar o título da app bar caso seja pesquisado pela situação
+
+
+  ------------------------------------------------------------------------------------
+
+  */
 
   Text _tituloAppBar(){
     if(widget._pessoaFiltro.filtro == 1){
@@ -46,11 +66,31 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
     }
   }
 
+  /*------------------------------------------------------------------------------------
+
+
+  Método para abrir o chamado em outra tela
+
+
+  ------------------------------------------------------------------------------------
+
+  */
+
    _detalharChamado(Ordem ordem) {
     PessoaOrdem _pessoaOrdem =
         PessoaOrdem(pessoa: widget._pessoaFiltro.pessoa, ordem: ordem);
     Navigator.pushNamed(context, "/detalhechamado", arguments: _pessoaOrdem);
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método para mudar a cor do fundo do card do chamado
+
+
+  ------------------------------------------------------------------------------------
+
+  */
 
   Color _verCor(Ordem ordem) {
     if (ordem.situacao.idSituacao == 1) {
@@ -62,12 +102,32 @@ class _OrdensFiltroState extends State<OrdensFiltro> {
     }
   }
 
+  /*------------------------------------------------------------------------------------
+
+
+  Initstate para iniciar os métodos
+
+
+  ------------------------------------------------------------------------------------
+
+  */
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _adicionarListener();
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método para criar tela
+
+
+  ------------------------------------------------------------------------------------
+
+  */
   
   @override
   Widget build(BuildContext context) {

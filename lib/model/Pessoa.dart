@@ -1,5 +1,16 @@
-import 'dart:convert';
+/*
 
+---------------------------------------------------------
+
+
+Classe Pessoa com atributos e métodos
+
+
+----------------------------------------------------------
+
+*/
+
+import 'dart:convert';
 import 'package:helpdesk/model/TipoPessoa.dart';
 
 class Pessoa {

@@ -30,6 +30,15 @@ class _CadastroChamadoState extends State<CadastroChamado> {
   final OrdemRepository _ordemRepository = OrdemRepository();
   final LocalRepository _localRepository = LocalRepository();
 
+/*------------------------------------------------------------------------------------
+
+
+Mostra dialog de espera
+
+
+------------------------------------------------------------------------------------
+*/
+
   _mostrarDialogEsperando(context) {
     showDialog(
       context: context,
@@ -50,6 +59,15 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     );
   }
 
+/*------------------------------------------------------------------------------------
+
+
+Método para tirar foto a partir da camera do celular
+
+
+------------------------------------------------------------------------------------
+*/
+
   _tirarFotoCamera() async {
     final pickedFile =
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
@@ -61,6 +79,15 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     }
   }
 
+/*------------------------------------------------------------------------------------
+
+
+Método para escolher foto a partir da galeria do celular
+
+
+------------------------------------------------------------------------------------
+*/
+
   _tirarFotoGaleria() async {
     final pickedFile =
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
@@ -71,6 +98,15 @@ class _CadastroChamadoState extends State<CadastroChamado> {
       });
     }
   }
+
+/*------------------------------------------------------------------------------------
+
+
+Método para cadastrar chamado/ordem caso o formulario seja validado com sucesso.
+
+
+------------------------------------------------------------------------------------
+*/
 
   _cadastrarOrdem() async {
     _mostrarDialogEsperando(context);
@@ -91,11 +127,30 @@ class _CadastroChamadoState extends State<CadastroChamado> {
     Navigator.pushNamed(context, "/homecliente",arguments: widget._pessoa);
   }
 
+/*------------------------------------------------------------------------------------
+
+
+Método initstate
+
+
+------------------------------------------------------------------------------------
+*/
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
+/*------------------------------------------------------------------------------------
+
+
+Método build para construir tela
+
+
+------------------------------------------------------------------------------------
+*/
+
 
   @override
   Widget build(BuildContext context) {

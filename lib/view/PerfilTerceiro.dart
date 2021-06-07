@@ -23,6 +23,15 @@ class _PerfilState extends State<PerfilTerceiro> {
   final _controllerAceito = StreamController<List<Ordem>>.broadcast();
   final _controllerCriado = StreamController<List<Ordem>>.broadcast();
 
+  /*------------------------------------------------------------------------------------
+
+
+    Método para adicionar listener de chamados criados pela pessoa do tipo cliente
+
+
+  ------------------------------------------------------------------------------------
+*/
+
   Future<Stream<List<Ordem>>> _adicionarListenerChamadosCriados() async {
     Stream<List<Ordem>> streamCriado = Stream.fromFuture(
         _ordemRepository.listarChamadosCriadosPorPessoa(
@@ -31,6 +40,15 @@ class _PerfilState extends State<PerfilTerceiro> {
       _controllerCriado.add(event);
     });
   }
+
+    /*------------------------------------------------------------------------------------
+
+
+    Método para adicionar listener de chamados aceitos pela pessoa do tipo técnico
+
+
+  ------------------------------------------------------------------------------------
+*/
 
   Future<Stream<List<Ordem>>> _adicionarListenerChamadosAceitos() async {
     Stream<List<Ordem>> streamAceito = Stream.fromFuture(
@@ -41,11 +59,32 @@ class _PerfilState extends State<PerfilTerceiro> {
     });
   }
 
+/*------------------------------------------------------------------------------------
+
+
+      Método para abrir tela de detalhe do chamado 
+
+
+    ------------------------------------------------------------------------------------
+*/    
+
+
   _detalharChamado(Ordem ordem) {
     PessoaOrdem _pessoaOrdem =
         PessoaOrdem(pessoa: widget._perfilUtil.pessoaLogada, ordem: ordem);
     Navigator.pushNamed(context, "/detalhechamado", arguments: _pessoaOrdem);
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+      Método para determinar cor do fundo do chamado a partir da cor do mesmo 
+
+
+    ------------------------------------------------------------------------------------
+  */
+
+
 
   Color _verCor(Ordem ordem) {
     if (ordem.situacao.idSituacao == 1) {
@@ -57,12 +96,31 @@ class _PerfilState extends State<PerfilTerceiro> {
     }
   }
 
+
+  /*------------------------------------------------------------------------------------
+
+
+      initstate para inicializar listeners 
+
+
+    ------------------------------------------------------------------------------------
+  */
+
   @override
   void initState() {
     _adicionarListenerChamadosCriados();
     _adicionarListenerChamadosAceitos();
     super.initState();
   }
+
+    /*------------------------------------------------------------------------------------
+
+
+      método build para construção da tela 
+
+
+    ------------------------------------------------------------------------------------
+  */
 
   @override
   Widget build(BuildContext context) {

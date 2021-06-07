@@ -15,6 +15,16 @@ class _LoginState extends State<Login> {
   Pessoa _pessoa = Pessoa();
   final PessoaRepository _repository = PessoaRepository();
 
+  /*------------------------------------------------------------------------------------
+
+
+  Dialog de espera quando é realizado login
+
+
+  ------------------------------------------------------------------------------------
+
+  */
+
   _mostrarDialogEsperando(context) {
     showDialog(
           context: context,
@@ -44,23 +54,23 @@ class _LoginState extends State<Login> {
           },);
   }
 
+  /*------------------------------------------------------------------------------------
+
+
+  Dialog caso de algum erro na realização do login
+
+
+  ------------------------------------------------------------------------------------
+
+  */
+
   _dialogErro(){
     showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
-              actions: [
-                TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: GoogleFonts.lato(),))
-              ],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
+              title: Center(
+                child: Text(
                       "Erro ao realizar login no sistema",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.lato(
@@ -69,7 +79,40 @@ class _LoginState extends State<Login> {
                           fontSize: 20
                         )
                       ),),
+              ),
+              actions: [
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    child: Center(
+                      child: Text(
+                        "Ok",
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Color.fromRGBO(0, 128, 255, 1),
+                        Color.fromRGBO(51, 153, 255, 1)
+                      ]),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
+                ),
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
                     child: Text(
@@ -87,6 +130,16 @@ class _LoginState extends State<Login> {
             );
           },);
   }
+
+  /*------------------------------------------------------------------------------------
+
+
+  Método para logar. Chamado quando o formulário é validado
+
+
+  ------------------------------------------------------------------------------------
+
+  */
 
   _login() async {
     Pessoa p = await _repository.logarPessoa(_pessoa);
@@ -108,6 +161,16 @@ class _LoginState extends State<Login> {
     }
     
   }
+
+/*------------------------------------------------------------------------------------
+
+
+  Método para criar a tela
+
+
+  ------------------------------------------------------------------------------------
+
+  */
 
   @override
   Widget build(BuildContext context) {

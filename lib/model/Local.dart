@@ -1,5 +1,16 @@
-import 'dart:convert';
+/*
 
+---------------------------------------------------------
+
+
+Classe Local com atributos e métodos
+
+
+----------------------------------------------------------
+
+*/
+
+import 'dart:convert';
 import 'Ordem.dart';
 
 class Local {

@@ -1,5 +1,17 @@
-import 'dart:async';
+/* 
 
+--------------------------------------------
+
+Classe util para pesquisa de chamado por palavra
+
+
+---------------------------------------------
+
+*/
+
+
+
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/model/Ordem.dart';

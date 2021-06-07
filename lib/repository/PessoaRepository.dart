@@ -1,12 +1,26 @@
 
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/util/Dio.dart';
 import 'package:helpdesk/util/Ip.dart';
 
 class PessoaRepository implements Ip{
+
+    /*
+
+  ------------------------------------
+
+
+  Métodos utilizando a biblioteca dio para comunicação com o back end
+
+
+  -------------------------------------
+
+  
+  */
+
+  // envia foto para o back end, retorna url para salvar no banco
 
   Future<String> enviarFoto(File file) async{
     var _dio = CustomDio().instance;
@@ -19,6 +33,7 @@ class PessoaRepository implements Ip{
 
   }
   
+  // cadastra pessoa
   
   Future<bool> inserirPessoa(Pessoa p) async {
     var _dio = CustomDio().instance;
@@ -26,6 +41,9 @@ class PessoaRepository implements Ip{
         .post("http://192.168.0.105:8080/pessoa", data: p.toJson())
         .then((value) => value.data).onError((error, stackTrace) => false);
     }
+
+  // faz login
+
 
     Future<Pessoa> logarPessoa(Pessoa p) async{
       var _dio = CustomDio().instance;
@@ -40,12 +58,16 @@ class PessoaRepository implements Ip{
       } );
     }
 
+    //verifica quantos chamados o técnico tem em andamento. Usada ao aceitar chamado
+
     Future<int> verificarQuantidadeChamado(int id) async {
     var _dio = CustomDio().instance;
     return await _dio
         .get("http://192.168.0.105:8080/pessoa/verificacaoChamado/$id")
         .then((value) => value.data);
     }
+
+    //verifica email e cpf do usuário quando ele quer gerar uma nova senha. Utilizado na tela de esqueci minha senha
 
     Future<Pessoa> verificarEmailECpf(Pessoa p) async{
       var _dio = CustomDio().instance;
@@ -59,6 +81,8 @@ class PessoaRepository implements Ip{
         }
       });
     }
+
+    // atualiza senha no banco
 
     Future<Pessoa> atualizarSenha(Pessoa p) async{
       var _dio = CustomDio().instance;
