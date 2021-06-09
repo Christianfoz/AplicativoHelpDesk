@@ -38,7 +38,7 @@ class PessoaRepository implements Ip{
   Future<bool> inserirPessoa(Pessoa p) async {
     var _dio = CustomDio().instance;
     return await _dio
-        .post("http://192.168.0.105:8080/pessoa", data: p.toJson())
+        .post(Ip.ip + "pessoa", data: p.toJson())
         .then((value) => value.data).onError((error, stackTrace) => false);
     }
 
@@ -47,7 +47,7 @@ class PessoaRepository implements Ip{
 
     Future<Pessoa> logarPessoa(Pessoa p) async{
       var _dio = CustomDio().instance;
-      return await _dio.post("http://192.168.0.105:8080/pessoa/login",data: p.toJsonLogin())
+      return await _dio.post(Ip.ip + "pessoa/login",data: p.toJsonLogin())
       .then((value) {
         if(value.data == ""){
           return null;
@@ -63,7 +63,7 @@ class PessoaRepository implements Ip{
     Future<int> verificarQuantidadeChamado(int id) async {
     var _dio = CustomDio().instance;
     return await _dio
-        .get("http://192.168.0.105:8080/pessoa/verificacaoChamado/$id")
+        .get(Ip.ip + "pessoa/verificacaoChamado/$id")
         .then((value) => value.data);
     }
 
@@ -71,7 +71,7 @@ class PessoaRepository implements Ip{
 
     Future<Pessoa> verificarEmailECpf(Pessoa p) async{
       var _dio = CustomDio().instance;
-      return await _dio.post("http://192.168.0.105:8080/pessoa/verificarEmailECpf",data: p.toMapEsqueciSenha())
+      return await _dio.post(Ip.ip + "pessoa/verificarEmailECpf",data: p.toMapEsqueciSenha())
       .then((value) {
         if(value.data == ""){
           return null;
@@ -86,7 +86,7 @@ class PessoaRepository implements Ip{
 
     Future<Pessoa> atualizarSenha(Pessoa p) async{
       var _dio = CustomDio().instance;
-      return await _dio.post("http://192.168.0.105:8080/pessoa/atualizarSenha",data: p.toJson())
+      return await _dio.post(Ip.ip + "pessoa/atualizarSenha",data: p.toJson())
       .then((value) => Pessoa.fromMap(value.data));
     }
   }

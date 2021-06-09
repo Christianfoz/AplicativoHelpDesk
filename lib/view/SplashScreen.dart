@@ -12,6 +12,7 @@ Classe com a tela de splash screen
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
 import 'package:helpdesk/view/Login.dart';
 
@@ -27,8 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.didChangeDependencies();
     Timer(
       Duration(seconds: 2), (){
-        Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (_) => Login()));
+        Navigator.pushReplacementNamed(context, "/login");
       }
     );
   }
@@ -40,11 +40,13 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Text(
           "HelpDesk",
-          style: TextStyle(
+          style: GoogleFonts.lato(
+            textStyle: TextStyle(
             color: Colors.white,
             fontSize: 32,
             fontWeight: FontWeight.bold,
           ),
+          )
         ),
       ),
     );

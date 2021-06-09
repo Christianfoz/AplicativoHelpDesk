@@ -237,7 +237,7 @@ class _PerfilState extends State<PerfilTerceiro> {
                               ),
                             ],
                           ),
-                          widget._perfilUtil.pessoaLogada.idPessoa ==
+                          /* widget._perfilUtil.pessoaLogada.idPessoa ==
                                   widget._perfilUtil.pessoaPerfil.idPessoa
                               ? Row(children: <Widget>[
                                   Expanded(
@@ -260,6 +260,7 @@ class _PerfilState extends State<PerfilTerceiro> {
                                   ))
                                 ])
                               : Container(),
+                              */
                           Row(children: <Widget>[
                             Expanded(
                                 child: Padding(
@@ -281,7 +282,7 @@ class _PerfilState extends State<PerfilTerceiro> {
                             ))
                           ]),
                           // verifica se é técnico, caso seja não aparecerá a parte de seção de chamados criados
-                          widget._perfilUtil.pessoaPerfil.tipoPessoa
+                           widget._perfilUtil.pessoaPerfil.tipoPessoa
                                       .nomeTipoPessoa =="Técnico"
                               ? Container()
                               : StreamBuilder(
