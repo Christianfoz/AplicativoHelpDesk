@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:helpdesk/main.dart';
+import 'package:helpdesk/model/Comentario.dart';
 import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Situacao.dart';
+import 'package:helpdesk/repository/ComentarioRepository.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/repository/PessoaRepository.dart';
 import 'package:helpdesk/util/PerfilUtil.dart';
@@ -21,7 +24,12 @@ class DetalheChamado extends StatefulWidget {
 class _DetalheChamadoState extends State<DetalheChamado> {
   final _repository = PessoaRepository();
   final _ordemRepository = OrdemRepository();
-  final _formKey = GlobalKey<FormState>();
+  final _comentarioRepository = ComentarioRepository();
+  final _formKey = GlobalKey<FormState>(); 
+  final _formKeyComentario = GlobalKey<FormState>();
+  final _controllerComentario = StreamController<List<Comentario>>.broadcast();
+  Comentario _comentario = Comentario();
+
 
   /*------------------------------------------------------------------------------------
 
@@ -80,7 +88,6 @@ class _DetalheChamadoState extends State<DetalheChamado> {
 
   */
 
-
   _dialogErro() {
     showDialog(
       context: context,
@@ -107,33 +114,41 @@ class _DetalheChamadoState extends State<DetalheChamado> {
           ),
           actions: [
             GestureDetector(
-                onTap: () {
+              onTap: () {
+                if(widget._pessoaOrdem.pessoa.tipoPessoa.idTipoPessoa == 1){
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, "/hometecnico",arguments: widget._pessoaOrdem.pessoa);
-                },
-                child: Container(
-                  padding:
-                      EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
-                  child: Center(
-                    child: Text(
-                      "Ok",
-                      style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Color.fromRGBO(0, 128, 255, 1),
-                      Color.fromRGBO(51, 153, 255, 1)
-                    ]),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
+                Navigator.pushNamed(context, "/homecliente",
+                    arguments: widget._pessoaOrdem.pessoa);
+                }
+                else{
+                   Navigator.pop(context);
+                Navigator.pushNamed(context, "/hometecnico",
+                    arguments: widget._pessoaOrdem.pessoa);
+                }
+              },
+              child: Container(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                child: Center(
+                  child: Text(
+                    "Ok",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
                   ),
                 ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                    Color.fromRGBO(0, 128, 255, 1),
+                    Color.fromRGBO(51, 153, 255, 1)
+                  ]),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
+            ),
           ],
         );
       },
@@ -155,9 +170,12 @@ class _DetalheChamadoState extends State<DetalheChamado> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Center(
-            child: Text("Erro ao aceitar chamado",style: GoogleFonts.lato(),),
-          ),
+            title: Center(
+              child: Text(
+                "Erro ao aceitar chamado",
+                style: GoogleFonts.lato(),
+              ),
+            ),
             content: Container(
               padding: EdgeInsets.all(16),
               child: Column(
@@ -179,7 +197,8 @@ class _DetalheChamadoState extends State<DetalheChamado> {
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, "/hometecnico",arguments: widget._pessoaOrdem.pessoa);
+                  Navigator.pushNamed(context, "/hometecnico",
+                      arguments: widget._pessoaOrdem.pessoa);
                 },
                 child: Container(
                   padding:
@@ -297,13 +316,22 @@ class _DetalheChamadoState extends State<DetalheChamado> {
       builder: (context) {
         return AlertDialog(
             title: Center(
-              child: Text("Operação realizada com sucesso",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+                child: Text("Operação realizada com sucesso",
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
             actions: [
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, "/hometecnico",arguments: widget._pessoaOrdem.pessoa);
+                  if(widget._pessoaOrdem.pessoa.tipoPessoa.idTipoPessoa == 1){
+                    Navigator.pushNamed(context, "/homecliente",
+                      arguments: widget._pessoaOrdem.pessoa);
+                  }
+                  else{
+                    Navigator.pushNamed(context, "/hometecnico",
+                      arguments: widget._pessoaOrdem.pessoa);
+                  }
+                  
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -353,7 +381,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
     });
   }
 
- /*------------------------------------------------------------------------------------
+  /*------------------------------------------------------------------------------------
 
 
   Método para abrir dialog para inserção do campo solução pelo tecnico
@@ -451,7 +479,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
     );
   }
 
- /*------------------------------------------------------------------------------------
+  /*------------------------------------------------------------------------------------
 
 
   Método para atualizar o chamado de em andamento para resolvido. Chamado pelo método abrirTelaSolucao caso tudo esteja
@@ -461,7 +489,6 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   ------------------------------------------------------------------------------------
 
 */
-
 
   _finalizarChamado() {
     Ordem _ordem = widget._pessoaOrdem.ordem;
@@ -682,6 +709,217 @@ class _DetalheChamadoState extends State<DetalheChamado> {
     );
   }
 
+  Color _verCorComentario(Comentario comentario) {
+    if (comentario.criadorComentario.tipoPessoa.idTipoPessoa == 1) {
+      return Color(0xffffffff);
+    } else {
+      return Color(0xff0088cc);
+    }
+  }
+
+  Future<Stream<List<Comentario>>> _adicionarListenerComentario() async {
+    Stream<List<Comentario>> stream =
+        Stream.fromFuture(_comentarioRepository.listarComentarioPorChamado(widget._pessoaOrdem.ordem.idOrdem));
+    stream.listen((event) {
+      _controllerComentario.add(event);
+    });
+  }
+
+  _mostrarFormularioComentario(){
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 4,
+            child: Form(
+                    key: _formKeyComentario,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                                          labelStyle: GoogleFonts.lato(),
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color(0xff0088cc),
+                                                width: 2),
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                          ),
+                                          prefixIcon: Icon(Icons.text_snippet,color: themeData.primaryColor,),
+                                          labelText: "Comentário",
+                                        ),
+                  keyboardType: TextInputType.text,
+                  validator: (comentario) {
+                    return Validador()
+                        .add(Validar.OBRIGATORIO, msg: "Insira seu comentario")
+                        .maxLength(120, msg: "Comentario deve ter menos de 120 caracteres")
+                        .valido(comentario);
+                  },
+                  onSaved: (comentario) => _comentario.comentario = comentario,
+                )),
+          ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+                color: themeData.primaryColor,
+                icon: Icon(Icons.send,color: themeData.primaryColor,),
+                onPressed: () async{
+                  if (_formKeyComentario.currentState.validate()) {
+                    _formKeyComentario.currentState.save();
+                    _enviarComentario();
+                  }
+                }
+            ),
+          ),
+              )
+        ],
+      ),
+    );
+        
+  }
+
+  _enviarComentario() async{
+    _comentario.criadorComentario = widget._pessoaOrdem.pessoa;
+    _comentario.dataComentario = DateTime.now();
+    _comentario.ordem = widget._pessoaOrdem.ordem;
+    await _comentarioRepository.criarComentario(_comentario).then((value) {
+       if(value){
+         _dialogSucesso();
+       }
+       else{
+         _dialogErro();
+       }
+    });
+    
+  }
+
+  Widget _mostrarSecaoComentario(BuildContext context) {
+    return Center(
+      child: Column(
+      children: [
+        Row(children: <Widget>[
+          Expanded(
+              child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Divider(
+              thickness: 2,
+            ),
+          )),
+          Text(
+            "Comentários",
+            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16)),
+          ),
+          Expanded(
+              child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Divider(
+              thickness: 2,
+            ),
+          ))
+        ]),
+        /* 
+        
+        Só aparecerá o formulario se for o tecnico que aceitou o chamado ou se for a pessoa que criou o chamado
+
+        */
+
+        
+        
+        StreamBuilder(
+          stream: _controllerComentario.stream,
+          builder: (context, AsyncSnapshot<List<Comentario>> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                return Center(
+                  child: Text(
+                    "Nenhum comentario encontrado",
+                    style: GoogleFonts.lato(),)
+                );
+                break;
+              case ConnectionState.waiting:
+                return Center(
+                  child: CircularProgressIndicator()
+                );
+                break;
+              case ConnectionState.active:
+              case ConnectionState.done:
+                return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                Comentario comentario = snapshot.data[index];
+                                return GestureDetector(
+                                    onTap: () => null,
+                                    child: Container(
+                                        padding: EdgeInsets.all(8),
+                                        child: Card(
+                                          color: _verCorComentario(comentario),
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                      "${comentario.comentario}",
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 14,
+                                                        ),
+                                                      )),
+                                                ),
+                                                padding: EdgeInsets.all(10),
+                                              ),
+                                              Padding(
+                                                child: Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    //final formattedStr =
+                                                    child: Text(
+                                                      "Postado pelo ${(comentario.criadorComentario.tipoPessoa.nomeTipoPessoa)}" + " em "  +
+                                                          DateFormat(
+                                                                  DateFormat
+                                                                      .YEAR_MONTH_DAY,
+                                                                  'pt_Br')
+                                                              .format(comentario.dataComentario
+                                                                  ) +
+                                                          " as " +
+                                                          DateFormat('HH:mm',
+                                                                  'pt_Br')
+                                                              .format(comentario.dataComentario),
+                                                      maxLines: 2,
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                          fontSize: 13,
+                                                          fontStyle: FontStyle.italic
+                                                          ),
+                                                      )
+                                                    )),
+                                                padding: EdgeInsets.all(10),
+                                              )
+                                            ],
+                                          ),
+                                          elevation: 5,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0),
+                                          ),
+                                        )));
+                              },
+                            );
+                break;
+            }
+          },
+        ),
+        widget._pessoaOrdem.ordem.tecnico == widget._pessoaOrdem.pessoa || 
+        widget._pessoaOrdem.ordem.cliente == widget._pessoaOrdem.pessoa ?
+        _mostrarFormularioComentario() : Container(), 
+      ],
+    ));
+  }
+
   /*------------------------------------------------------------------------------------
 
 
@@ -690,6 +928,14 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   ------------------------------------------------------------------------------------
 
 */
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _adicionarListenerComentario();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -867,7 +1113,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                             ),
                           ),
 
-                            /*------------------------------------------------------------------------------------
+                          /*------------------------------------------------------------------------------------
 
 
                               Verifica se há solução. Se sim mostra, ao contrário ele não mostra
@@ -892,7 +1138,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                   ),
                                 ),
 
-                            /*------------------------------------------------------------------------------------
+                          /*------------------------------------------------------------------------------------
 
 
                               Verifica se há data de término. Se sim mostra, ao contrário ele não mostra
@@ -921,7 +1167,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                                   fontWeight:
                                                       FontWeight.normal)))),
                                 ),
-                            /*------------------------------------------------------------------------------------
+                          /*------------------------------------------------------------------------------------
 
 
                               Verifica se há técnico no chamado. Se sim mostra, ao contrário ele não mostra
@@ -951,6 +1197,17 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                                         FontWeight.normal))),
                                       )),
                                 ),
+
+                          /*
+
+                                COMENTARIOS
+
+
+                              */
+                          widget._pessoaOrdem.ordem.situacao.nomeSituacao ==
+                                  "Em andamento"
+                              ? _mostrarSecaoComentario(context)
+                              : Container(),
                           Row(children: <Widget>[
                             Expanded(
                                 child: Padding(
@@ -1161,3 +1418,5 @@ class _DetalheChamadoState extends State<DetalheChamado> {
         ));
   }
 }
+
+//jesus do ceu
