@@ -7,6 +7,7 @@ import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/util/CustomSearchDelegate.dart';
+import 'package:helpdesk/util/Ip.dart';
 import 'package:helpdesk/util/PerfilUtil.dart';
 import 'package:helpdesk/util/PessoaFiltro.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
@@ -78,7 +79,8 @@ class _HomeTecnicoState extends State<HomeTecnico> {
           ],
           title: Text(
             "Home Técnico",
-            style: GoogleFonts.lato(),),
+            style: GoogleFonts.lato(),
+          ),
         ),
         drawer: Drawer(
             child: ListView(
@@ -87,17 +89,15 @@ class _HomeTecnicoState extends State<HomeTecnico> {
             GestureDetector(
               onTap: () => _abrirPerfil(),
               child: UserAccountsDrawerHeader(
-                accountEmail: Text(
-                  widget._pessoa.email,
-                  style: GoogleFonts.lato()),
-                accountName:
-                    Text(
-                      widget._pessoa.nome + " " + widget._pessoa.sobrenome,
-                      style: GoogleFonts.lato(),),
+                accountEmail:
+                    Text(widget._pessoa.email, style: GoogleFonts.lato()),
+                accountName: Text(
+                  widget._pessoa.nome + " " + widget._pessoa.sobrenome,
+                  style: GoogleFonts.lato(),
+                ),
                 currentAccountPicture: CircleAvatar(
                     radius: 30,
-                    backgroundImage: NetworkImage(
-                        "http://192.168.0.105:8080/${widget._pessoa.foto}")),
+                    backgroundImage: NetworkImage(Ip.ip + widget._pessoa.foto)),
               ),
             ),
             ListTile(
@@ -105,31 +105,13 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                 Icons.search,
                 color: themeData.primaryColor,
               ),
-              title: Text(
-                "Ordens Criadas",
-                style: GoogleFonts.lato(
-                  textStyle: TextStyle(color: themeData.primaryColor)
-                )
-              ),
+              title: Text("Ordens Criadas",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: themeData.primaryColor))),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 1,pessoa: widget._pessoa));
-              } ,
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.search,
-                color: themeData.primaryColor,
-              ),
-              title: Text(
-                "Ordens Em Andamento",
-                style: GoogleFonts.lato(
-                  textStyle: TextStyle(color: themeData.primaryColor)
-                )
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 2,pessoa: widget._pessoa));
+                Navigator.pushNamed(context, "/ordemfiltro",
+                    arguments: PessoaFiltro(filtro: 1, pessoa: widget._pessoa));
               },
             ),
             ListTile(
@@ -137,37 +119,42 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                 Icons.search,
                 color: themeData.primaryColor,
               ),
-              title: Text(
-                "Ordens Resolvidas",
-                style: GoogleFonts.lato(
-                  textStyle: TextStyle(color: themeData.primaryColor)
-                )
-              ),
+              title: Text("Ordens Em Andamento",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: themeData.primaryColor))),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 3,pessoa: widget._pessoa));
-              } ,
+                Navigator.pushNamed(context, "/ordemfiltro",
+                    arguments: PessoaFiltro(filtro: 2, pessoa: widget._pessoa));
+              },
             ),
             ListTile(
-              leading: Icon(Icons.person, color: themeData.primaryColor),
-              title: Text(
-                "Perfil",
-                style: GoogleFonts.lato(
-                  textStyle: TextStyle(color: themeData.primaryColor)
-                )
+              leading: Icon(
+                Icons.search,
+                color: themeData.primaryColor,
               ),
+              title: Text("Ordens Resolvidas",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: themeData.primaryColor))),
               onTap: () {
-                _abrirPerfil();
-              }
+                Navigator.pop(context);
+                Navigator.pushNamed(context, "/ordemfiltro",
+                    arguments: PessoaFiltro(filtro: 3, pessoa: widget._pessoa));
+              },
             ),
+            ListTile(
+                leading: Icon(Icons.person, color: themeData.primaryColor),
+                title: Text("Perfil",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(color: themeData.primaryColor))),
+                onTap: () {
+                  _abrirPerfil();
+                }),
             ListTile(
                 leading: Icon(Icons.logout, color: themeData.primaryColor),
-                title: Text(
-                  "Sair",
-                  style: GoogleFonts.lato(
-                  textStyle: TextStyle(color: themeData.primaryColor)
-                )
-                ),
+                title: Text("Sair",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(color: themeData.primaryColor))),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, "/login");
@@ -194,7 +181,9 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                 ),
                 Text("Criado"),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 2,pessoa: widget._pessoa)),
+                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",
+                      arguments:
+                          PessoaFiltro(filtro: 2, pessoa: widget._pessoa)),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
@@ -206,8 +195,10 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                 ),
                 Text("Em andamento"),
                 GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, "/ordemfiltro",arguments: PessoaFiltro(filtro: 3,pessoa: widget._pessoa)),
-                    child: Padding(
+                  onTap: () => Navigator.pushNamed(context, "/ordemfiltro",
+                      arguments:
+                          PessoaFiltro(filtro: 3, pessoa: widget._pessoa)),
+                  child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: 20,
@@ -300,26 +291,26 @@ class _HomeTecnicoState extends State<HomeTecnico> {
                                                         Alignment.centerRight,
                                                     //final formattedStr =
                                                     child: Text(
-                                                      "Criado em " +
-                                                          DateFormat(
-                                                                  DateFormat
-                                                                      .YEAR_MONTH_DAY,
-                                                                  'pt_Br')
-                                                              .format(ordem
-                                                                  .dataInicio) +
-                                                          " as " +
-                                                          DateFormat('HH:mm',
-                                                                  'pt_Br')
-                                                              .format(ordem
-                                                                  .dataInicio),
-                                                      maxLines: 1,
-                                                      style: GoogleFonts.lato(
-                                                        textStyle: TextStyle(
-                                                          fontSize: 13,
-                                                          fontStyle: FontStyle.italic
-                                                          ),
-                                                      )
-                                                    )),
+                                                        "Criado em " +
+                                                            DateFormat(
+                                                                    DateFormat
+                                                                        .YEAR_MONTH_DAY,
+                                                                    'pt_Br')
+                                                                .format(ordem
+                                                                    .dataInicio) +
+                                                            " as " +
+                                                            DateFormat('HH:mm',
+                                                                    'pt_Br')
+                                                                .format(ordem
+                                                                    .dataInicio),
+                                                        maxLines: 1,
+                                                        style: GoogleFonts.lato(
+                                                          textStyle: TextStyle(
+                                                              fontSize: 13,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .italic),
+                                                        ))),
                                                 padding: EdgeInsets.all(10),
                                               )
                                             ],

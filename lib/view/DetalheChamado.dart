@@ -8,6 +8,7 @@ import 'package:helpdesk/model/Situacao.dart';
 import 'package:helpdesk/repository/ComentarioRepository.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/repository/PessoaRepository.dart';
+import 'package:helpdesk/util/Ip.dart';
 import 'package:helpdesk/util/PerfilUtil.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -25,11 +26,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   final _repository = PessoaRepository();
   final _ordemRepository = OrdemRepository();
   final _comentarioRepository = ComentarioRepository();
-  final _formKey = GlobalKey<FormState>(); 
+  final _formKey = GlobalKey<FormState>();
   final _formKeyComentario = GlobalKey<FormState>();
   final _controllerComentario = StreamController<List<Comentario>>.broadcast();
   Comentario _comentario = Comentario();
-
 
   /*------------------------------------------------------------------------------------
 
@@ -115,15 +115,14 @@ class _DetalheChamadoState extends State<DetalheChamado> {
           actions: [
             GestureDetector(
               onTap: () {
-                if(widget._pessoaOrdem.pessoa.tipoPessoa.idTipoPessoa == 1){
+                if (widget._pessoaOrdem.pessoa.tipoPessoa.idTipoPessoa == 1) {
                   Navigator.pop(context);
-                Navigator.pushNamed(context, "/homecliente",
-                    arguments: widget._pessoaOrdem.pessoa);
-                }
-                else{
-                   Navigator.pop(context);
-                Navigator.pushNamed(context, "/hometecnico",
-                    arguments: widget._pessoaOrdem.pessoa);
+                  Navigator.pushNamed(context, "/homecliente",
+                      arguments: widget._pessoaOrdem.pessoa);
+                } else {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/hometecnico",
+                      arguments: widget._pessoaOrdem.pessoa);
                 }
               },
               child: Container(
@@ -323,15 +322,13 @@ class _DetalheChamadoState extends State<DetalheChamado> {
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
-                  if(widget._pessoaOrdem.pessoa.tipoPessoa.idTipoPessoa == 1){
+                  if (widget._pessoaOrdem.pessoa.tipoPessoa.idTipoPessoa == 1) {
                     Navigator.pushNamed(context, "/homecliente",
-                      arguments: widget._pessoaOrdem.pessoa);
-                  }
-                  else{
+                        arguments: widget._pessoaOrdem.pessoa);
+                  } else {
                     Navigator.pushNamed(context, "/hometecnico",
-                      arguments: widget._pessoaOrdem.pessoa);
+                        arguments: widget._pessoaOrdem.pessoa);
                   }
-                  
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -392,6 +389,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
 */
 
   _alertInserirSolucao() {
+    if (widget._pessoaOrdem.ordem.tecnico.idPessoa !=
+        widget._pessoaOrdem.pessoa.idPessoa) {
+      return _dialogErroFinalizar();
+    }
     showDialog(
       context: context,
       builder: (context) {
@@ -450,7 +451,7 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                               padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                               child: Center(
                                 child: Text(
-                                  "Enviar chamado",
+                                  "Enviar Solução",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
@@ -492,20 +493,16 @@ class _DetalheChamadoState extends State<DetalheChamado> {
 
   _finalizarChamado() {
     Ordem _ordem = widget._pessoaOrdem.ordem;
-    if (_ordem.tecnico.idPessoa != widget._pessoaOrdem.ordem.tecnico.idPessoa) {
-      return _dialogErroFinalizar();
-    } else {
-      _ordem.situacao = Situacao.alt(3, "Resolvido");
-      _ordemRepository.atualizarEstadoParaResolvido(_ordem).then((value) {
-        if (value) {
-          return _dialogSucesso();
-        } else {
-          return _dialogErro();
-        }
-      }).onError((error, stackTrace) {
+    _ordem.situacao = Situacao.alt(3, "Resolvido");
+    _ordemRepository.atualizarEstadoParaResolvido(_ordem).then((value) {
+      if (value) {
+        return _dialogSucesso();
+      } else {
         return _dialogErro();
-      });
-    }
+      }
+    }).onError((error, stackTrace) {
+      return _dialogErro();
+    });
   }
 
   /*------------------------------------------------------------------------------------
@@ -718,85 +715,93 @@ class _DetalheChamadoState extends State<DetalheChamado> {
   }
 
   Future<Stream<List<Comentario>>> _adicionarListenerComentario() async {
-    Stream<List<Comentario>> stream =
-        Stream.fromFuture(_comentarioRepository.listarComentarioPorChamado(widget._pessoaOrdem.ordem.idOrdem));
+    Stream<List<Comentario>> stream = Stream.fromFuture(_comentarioRepository
+        .listarComentarioPorChamado(widget._pessoaOrdem.ordem.idOrdem));
     stream.listen((event) {
       _controllerComentario.add(event);
     });
   }
 
-  _mostrarFormularioComentario(){
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 4,
-            child: Form(
-                    key: _formKeyComentario,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                                          labelStyle: GoogleFonts.lato(),
-                                          border: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color(0xff0088cc),
-                                                width: 2),
-                                            borderRadius:
-                                                BorderRadius.circular(2),
-                                          ),
-                                          prefixIcon: Icon(Icons.text_snippet,color: themeData.primaryColor,),
-                                          labelText: "Comentário",
-                                        ),
-                  keyboardType: TextInputType.text,
-                  validator: (comentario) {
-                    return Validador()
-                        .add(Validar.OBRIGATORIO, msg: "Insira seu comentario")
-                        .maxLength(120, msg: "Comentario deve ter menos de 120 caracteres")
-                        .valido(comentario);
-                  },
-                  onSaved: (comentario) => _comentario.comentario = comentario,
-                )),
-          ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-                color: themeData.primaryColor,
-                icon: Icon(Icons.send,color: themeData.primaryColor,),
-                onPressed: () async{
-                  if (_formKeyComentario.currentState.validate()) {
-                    _formKeyComentario.currentState.save();
-                    _enviarComentario();
-                  }
-                }
+  _mostrarFormularioComentario() {
+    if (widget._pessoaOrdem.ordem.situacao.idSituacao == 3) {
+      return Container();
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Form(
+                  key: _formKeyComentario,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelStyle: GoogleFonts.lato(),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: Color(0xff0088cc), width: 2),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.text_snippet,
+                        color: themeData.primaryColor,
+                      ),
+                      labelText: "Comentário",
+                    ),
+                    keyboardType: TextInputType.text,
+                    validator: (comentario) {
+                      return Validador()
+                          .add(Validar.OBRIGATORIO,
+                              msg: "Insira seu comentario")
+                          .maxLength(120,
+                              msg:
+                                  "Comentario deve ter menos de 120 caracteres")
+                          .valido(comentario);
+                    },
+                    onSaved: (comentario) =>
+                        _comentario.comentario = comentario,
+                  )),
             ),
-          ),
-              )
-        ],
-      ),
-    );
-        
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                    color: themeData.primaryColor,
+                    icon: Icon(
+                      Icons.send,
+                      color: themeData.primaryColor,
+                    ),
+                    onPressed: () async {
+                      if (_formKeyComentario.currentState.validate()) {
+                        _formKeyComentario.currentState.save();
+                        _enviarComentario();
+                      }
+                    }),
+              ),
+            )
+          ],
+        ),
+      );
+    }
   }
 
-  _enviarComentario() async{
+  _enviarComentario() async {
     _comentario.criadorComentario = widget._pessoaOrdem.pessoa;
     _comentario.dataComentario = DateTime.now();
     _comentario.ordem = widget._pessoaOrdem.ordem;
     await _comentarioRepository.criarComentario(_comentario).then((value) {
-       if(value){
-         _dialogSucesso();
-       }
-       else{
-         _dialogErro();
-       }
+      if (value) {
+        _dialogSucesso();
+      } else {
+        _dialogErro();
+      }
     });
-    
   }
 
   Widget _mostrarSecaoComentario(BuildContext context) {
     return Center(
-      child: Column(
+        child: Column(
       children: [
         Row(children: <Widget>[
           Expanded(
@@ -824,98 +829,90 @@ class _DetalheChamadoState extends State<DetalheChamado> {
 
         */
 
-        
-        
         StreamBuilder(
           stream: _controllerComentario.stream,
           builder: (context, AsyncSnapshot<List<Comentario>> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
                 return Center(
-                  child: Text(
-                    "Nenhum comentario encontrado",
-                    style: GoogleFonts.lato(),)
-                );
+                    child: Text(
+                  "Nenhum comentario encontrado",
+                  style: GoogleFonts.lato(),
+                ));
                 break;
               case ConnectionState.waiting:
-                return Center(
-                  child: CircularProgressIndicator()
-                );
+                return Center(child: CircularProgressIndicator());
                 break;
               case ConnectionState.active:
               case ConnectionState.done:
                 return ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (context, index) {
-                                Comentario comentario = snapshot.data[index];
-                                return GestureDetector(
-                                    onTap: () => null,
-                                    child: Container(
-                                        padding: EdgeInsets.all(8),
-                                        child: Card(
-                                          color: _verCorComentario(comentario),
-                                          child: Column(
-                                            children: [
-                                              Padding(
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                      "${comentario.comentario}",
-                                                      style: GoogleFonts.lato(
-                                                        textStyle: TextStyle(
-                                                            fontSize: 14,
-                                                        ),
-                                                      )),
-                                                ),
-                                                padding: EdgeInsets.all(10),
-                                              ),
-                                              Padding(
-                                                child: Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    //final formattedStr =
-                                                    child: Text(
-                                                      "Postado pelo ${(comentario.criadorComentario.tipoPessoa.nomeTipoPessoa)}" + " em "  +
-                                                          DateFormat(
-                                                                  DateFormat
-                                                                      .YEAR_MONTH_DAY,
-                                                                  'pt_Br')
-                                                              .format(comentario.dataComentario
-                                                                  ) +
-                                                          " as " +
-                                                          DateFormat('HH:mm',
-                                                                  'pt_Br')
-                                                              .format(comentario.dataComentario),
-                                                      maxLines: 2,
-                                                      style: GoogleFonts.lato(
-                                                        textStyle: TextStyle(
-                                                          fontSize: 13,
-                                                          fontStyle: FontStyle.italic
-                                                          ),
-                                                      )
-                                                    )),
-                                                padding: EdgeInsets.all(10),
-                                              )
-                                            ],
-                                          ),
-                                          elevation: 5,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                        )));
-                              },
-                            );
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    Comentario comentario = snapshot.data[index];
+                    return GestureDetector(
+                        onTap: () => null,
+                        child: Container(
+                            padding: EdgeInsets.all(8),
+                            child: Card(
+                              color: _verCorComentario(comentario),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text("${comentario.comentario}",
+                                          style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          )),
+                                    ),
+                                    padding: EdgeInsets.all(10),
+                                  ),
+                                  Padding(
+                                    child: Align(
+                                        alignment: Alignment.centerRight,
+                                        //final formattedStr =
+                                        child: Text(
+                                            "Postado pelo ${(comentario.criadorComentario.tipoPessoa.nomeTipoPessoa)}" +
+                                                " em " +
+                                                DateFormat(
+                                                        DateFormat
+                                                            .YEAR_MONTH_DAY,
+                                                        'pt_Br')
+                                                    .format(comentario
+                                                        .dataComentario) +
+                                                " as " +
+                                                DateFormat('HH:mm', 'pt_Br')
+                                                    .format(comentario
+                                                        .dataComentario),
+                                            maxLines: 2,
+                                            style: GoogleFonts.lato(
+                                              textStyle: TextStyle(
+                                                  fontSize: 13,
+                                                  fontStyle: FontStyle.italic),
+                                            ))),
+                                    padding: EdgeInsets.all(10),
+                                  )
+                                ],
+                              ),
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            )));
+                  },
+                );
                 break;
             }
           },
         ),
-        widget._pessoaOrdem.ordem.tecnico == widget._pessoaOrdem.pessoa || 
-        widget._pessoaOrdem.ordem.cliente == widget._pessoaOrdem.pessoa ?
-        _mostrarFormularioComentario() : Container(), 
+        widget._pessoaOrdem.ordem.tecnico == widget._pessoaOrdem.pessoa ||
+                widget._pessoaOrdem.ordem.cliente == widget._pessoaOrdem.pessoa
+            ? _mostrarFormularioComentario()
+            : Container(),
       ],
     ));
   }
@@ -929,19 +926,18 @@ class _DetalheChamadoState extends State<DetalheChamado> {
 
 */
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _adicionarListenerComentario();
   }
 
-
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('pt_BR', null);
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
             title: Text(
           "Detalhes do chamado",
@@ -992,8 +988,9 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                 child: GestureDetector(
                                   onTap: () => _abrirPerfil(1),
                                   child: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          "http://192.168.0.105:8080/${widget._pessoaOrdem.ordem.cliente.foto}"),
+                                      backgroundImage: NetworkImage(Ip.ip +
+                                          widget
+                                              ._pessoaOrdem.ordem.cliente.foto),
                                       radius: 40),
                                 ),
                               ),
@@ -1205,7 +1202,10 @@ class _DetalheChamadoState extends State<DetalheChamado> {
 
                               */
                           widget._pessoaOrdem.ordem.situacao.nomeSituacao ==
-                                  "Em andamento"
+                                      "Em andamento" ||
+                                  widget._pessoaOrdem.ordem.situacao
+                                          .nomeSituacao ==
+                                      "Resolvido"
                               ? _mostrarSecaoComentario(context)
                               : Container(),
                           Row(children: <Widget>[
@@ -1243,7 +1243,8 @@ class _DetalheChamadoState extends State<DetalheChamado> {
                                         height: 200,
                                         width: 300,
                                         child: Image.network(
-                                          "http://192.168.0.105:8080/${widget._pessoaOrdem.ordem.imagem}",
+                                          Ip.ip +
+                                              widget._pessoaOrdem.ordem.imagem,
                                           fit: BoxFit.fill,
                                         ),
                                       )),

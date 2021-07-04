@@ -12,5 +12,5 @@ Classe para colocar ip do back end
 
 
 class Ip{
-  static String ip = "http://192.168.0.105:8080/";
+  static String ip = "http://192.168.100.58:8080/";
 }

@@ -27,31 +27,28 @@ class _LoginState extends State<Login> {
 
   _mostrarDialogEsperando(context) {
     showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      "Entrando no sistema",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14
-                        )
-                      ),
-                      ),
-                  )
-                ],
-              ),
-            );
-          },);
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  "Entrando no sistema",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.normal, fontSize: 14)),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   /*------------------------------------------------------------------------------------
@@ -64,71 +61,66 @@ class _LoginState extends State<Login> {
 
   */
 
-  _dialogErro(){
+  _dialogErro() {
     showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Center(
-                child: Text(
-                      "Erro ao realizar login no sistema",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.lato(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(
+            child: Text(
+              "Erro ao realizar login no sistema",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.lato(
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            ),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Center(
+                  child: Text(
+                    "Ok",
+                    style: GoogleFonts.lato(
                         textStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20
-                        )
-                      ),),
-              ),
-              actions: [
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    child: Center(
-                      child: Text(
-                        "Ok",
-                        style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        Color.fromRGBO(0, 128, 255, 1),
-                        Color.fromRGBO(51, 153, 255, 1)
-                      ]),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
                   ),
                 ),
-              ],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                    Color.fromRGBO(0, 128, 255, 1),
+                    Color.fromRGBO(51, 153, 255, 1)
+                  ]),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      "Email e/ou senha incorretos",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14
-                        )
-                      ),
-                      ),
-                  )
-                ],
-              ),
-            );
-          },);
+            ),
+          ],
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  "Email e/ou senha incorretos.Caso seja técnico, seu cadastro ainda não foi validado",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.normal, fontSize: 14)),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   /*------------------------------------------------------------------------------------
@@ -143,23 +135,21 @@ class _LoginState extends State<Login> {
 
   _login() async {
     Pessoa p = await _repository.logarPessoa(_pessoa);
-    if(p == null){
+    if (p == null) {
       _dialogErro();
-    }
-    else{
+    } else {
       _mostrarDialogEsperando(context);
       Navigator.pop(context);
       if (p.tipoPessoa.nomeTipoPessoa == "Cliente") {
-      Navigator.pushNamedAndRemoveUntil(
-          context, "/homecliente", (Route<dynamic> route) => false,
-          arguments: p);
-    } else if (p.tipoPessoa.nomeTipoPessoa == "Técnico") {
-      Navigator.pushNamedAndRemoveUntil(
-          context, "/hometecnico", (Route<dynamic> route) => false,
-          arguments: p);
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/homecliente", (Route<dynamic> route) => false,
+            arguments: p);
+      } else if (p.tipoPessoa.nomeTipoPessoa == "Técnico") {
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/hometecnico", (Route<dynamic> route) => false,
+            arguments: p);
+      }
     }
-    }
-    
   }
 
 /*------------------------------------------------------------------------------------
@@ -175,6 +165,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Container(
         color: themeData.primaryColor,
         padding: EdgeInsets.all(16),
@@ -270,11 +261,10 @@ class _LoginState extends State<Login> {
                               Padding(
                                   child: GestureDetector(
                                     child: Text(
-                                        "Não tem conta? Clique aqui para criar uma",
-                                        style: GoogleFonts.lato(
-                                          textStyle: TextStyle(
-                                          )
-                                        ),),
+                                      "Não tem conta? Clique aqui para criar uma",
+                                      style: GoogleFonts.lato(
+                                          textStyle: TextStyle()),
+                                    ),
                                     onTap: () => Navigator.pushNamed(
                                         context, "/cadastro"),
                                   ),
@@ -282,8 +272,8 @@ class _LoginState extends State<Login> {
                               GestureDetector(
                                 child: Text(
                                   "Esqueceu sua senha? Clique aqui",
-                                  style: GoogleFonts.lato(
-                                  ),),
+                                  style: GoogleFonts.lato(),
+                                ),
                                 onTap: () => Navigator.pushNamed(
                                     context, "/esquecisenha"),
                               ),
@@ -304,11 +294,10 @@ class _LoginState extends State<Login> {
                                         child: Text(
                                           "Entrar",
                                           style: GoogleFonts.lato(
-                                            textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold)
-                                          ),
+                                              textStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
                                         ),
                                       ),
                                       decoration: BoxDecoration(

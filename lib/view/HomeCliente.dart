@@ -7,6 +7,7 @@ import 'package:helpdesk/model/Ordem.dart';
 import 'package:helpdesk/model/Pessoa.dart';
 import 'package:helpdesk/repository/OrdemRepository.dart';
 import 'package:helpdesk/util/CustomSearchDelegate.dart';
+import 'package:helpdesk/util/Ip.dart';
 import 'package:helpdesk/util/PerfilUtil.dart';
 import 'package:helpdesk/util/PessoaFiltro.dart';
 import 'package:helpdesk/util/PessoaOrdem.dart';
@@ -45,7 +46,7 @@ class _HomeClienteState extends State<HomeCliente> {
     Navigator.pushNamed(context, "/cadastrochamado", arguments: widget._pessoa);
   }
 
- /*------------------------------------------------------------------------------------
+  /*------------------------------------------------------------------------------------
 
 
   Método para abrir tela de perfil do usuário logado. Pode ser chamado ao clicar na foto ali no drawer
@@ -55,15 +56,14 @@ class _HomeClienteState extends State<HomeCliente> {
   ------------------------------------------------------------------------------------
   */
 
-
   _abrirPerfil() {
-    PerfilUtil _perfilUtil = PerfilUtil(pessoaLogada: widget._pessoa, pessoaPerfil: widget._pessoa);
-                Navigator.pop(context);
-                Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
+    PerfilUtil _perfilUtil =
+        PerfilUtil(pessoaLogada: widget._pessoa, pessoaPerfil: widget._pessoa);
+    Navigator.pop(context);
+    Navigator.pushNamed(context, "/perfil", arguments: _perfilUtil);
   }
 
-
- /*------------------------------------------------------------------------------------
+  /*------------------------------------------------------------------------------------
 
 
   Método para abrir tela de detalhe de chamado
@@ -72,15 +72,13 @@ class _HomeClienteState extends State<HomeCliente> {
   ------------------------------------------------------------------------------------
 */
 
-
-
   _detalharChamado(Ordem ordem) {
     PessoaOrdem _pessoaOrdem =
         PessoaOrdem(pessoa: widget._pessoa, ordem: ordem);
     Navigator.pushNamed(context, "/detalhechamado", arguments: _pessoaOrdem);
   }
 
- /*------------------------------------------------------------------------------------
+  /*------------------------------------------------------------------------------------
 
 
   Método para colorir card do chamado com base em sua situação
@@ -124,7 +122,6 @@ class _HomeClienteState extends State<HomeCliente> {
   ------------------------------------------------------------------------------------
 */
 
-
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('pt_BR', null);
@@ -160,8 +157,7 @@ class _HomeClienteState extends State<HomeCliente> {
                 ),
                 currentAccountPicture: CircleAvatar(
                     radius: 30,
-                    backgroundImage: NetworkImage(
-                        "http://192.168.0.105:8080/${widget._pessoa.foto}")),
+                    backgroundImage: NetworkImage(Ip.ip + widget._pessoa.foto)),
               ),
             ),
             ListTile(
@@ -214,14 +210,13 @@ class _HomeClienteState extends State<HomeCliente> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.person, color: themeData.primaryColor),
-              title: Text("Perfil",
-                  style: GoogleFonts.lato(
-                      textStyle: TextStyle(color: themeData.primaryColor))),
-              onTap: () {
-                _abrirPerfil();
-              } 
-            ),
+                leading: Icon(Icons.person, color: themeData.primaryColor),
+                title: Text("Perfil",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(color: themeData.primaryColor))),
+                onTap: () {
+                  _abrirPerfil();
+                }),
             ListTile(
                 leading: Icon(Icons.logout, color: themeData.primaryColor),
                 title: Text("Sair",
@@ -374,26 +369,26 @@ class _HomeClienteState extends State<HomeCliente> {
                                                         Alignment.centerRight,
                                                     //final formattedStr =
                                                     child: Text(
-                                                      "Criado em " +
-                                                          DateFormat(
-                                                                  DateFormat
-                                                                      .YEAR_MONTH_DAY,
-                                                                  'pt_Br')
-                                                              .format(ordem
-                                                                  .dataInicio) +
-                                                          " as " +
-                                                          DateFormat('HH:mm',
-                                                                  'pt_Br')
-                                                              .format(ordem
-                                                                  .dataInicio),
-                                                      maxLines: 1,
-                                                      style: GoogleFonts.lato(
-                                                        textStyle: TextStyle(
-                                                          fontSize: 13,
-                                                          fontStyle: FontStyle.italic
-                                                          ),
-                                                      )
-                                                    )),
+                                                        "Criado em " +
+                                                            DateFormat(
+                                                                    DateFormat
+                                                                        .YEAR_MONTH_DAY,
+                                                                    'pt_Br')
+                                                                .format(ordem
+                                                                    .dataInicio) +
+                                                            " as " +
+                                                            DateFormat('HH:mm',
+                                                                    'pt_Br')
+                                                                .format(ordem
+                                                                    .dataInicio),
+                                                        maxLines: 1,
+                                                        style: GoogleFonts.lato(
+                                                          textStyle: TextStyle(
+                                                              fontSize: 13,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .italic),
+                                                        ))),
                                                 padding: EdgeInsets.all(10),
                                               )
                                             ],

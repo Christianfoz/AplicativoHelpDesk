@@ -33,7 +33,6 @@ class _CadastroState extends State<Cadastro> {
   ------------------------------------------------------------------------------------
 */
 
-
   _mostrarDialogEsperando(context) {
     showDialog(
       context: context,
@@ -63,72 +62,67 @@ class _CadastroState extends State<Cadastro> {
   ------------------------------------------------------------------------------------
   */
 
-   _dialogErro(){
+  _dialogErro() {
     showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              actions: [
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    child: Center(
-                      child: Text(
-                        "Ok",
-                        style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        Color.fromRGBO(0, 128, 255, 1),
-                        Color.fromRGBO(51, 153, 255, 1)
-                      ]),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Center(
+                  child: Text(
+                    "Ok",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
                   ),
                 ),
-              ],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                    Color.fromRGBO(0, 128, 255, 1),
+                    Color.fromRGBO(51, 153, 255, 1)
+                  ]),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Erro ao se cadastrar no sistema",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20
-                        )
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      "CPF e/ou Email ja podem ter sido cadastrados no sistema. Caso não seja o caso, tente novamente mais tarde.",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14
-                        )
-                      ),
-                      ),
-                  )
-                ],
+            ),
+          ],
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Erro ao se cadastrar no sistema",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.lato(
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                ),
               ),
-            );
-          },);
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  "CPF e/ou Email ja podem ter sido cadastrados no sistema. Caso não seja o caso, tente novamente mais tarde.",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.normal, fontSize: 14)),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   /*------------------------------------------------------------------------------------
@@ -154,25 +148,20 @@ class _CadastroState extends State<Cadastro> {
       String url = await _repository.enviarFoto(_imagemSelecionada);
       _pessoa.foto = url;
       await _repository.inserirPessoa(_pessoa).then((value) {
-        if(value){
+        if (value) {
           Navigator.pushReplacementNamed(context, "/login");
-        }
-        else{
+        } else {
           _dialogErro();
         }
       });
-      
     }
-     _mostrarDialogEsperando(context);
+    _mostrarDialogEsperando(context);
     await _repository.inserirPessoa(_pessoa).then((value) {
-        if(value){
-          Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, "/login");
-        }
-        else{
-          
-        }
-      });
+      if (value) {
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, "/login");
+      } else {}
+    });
     Navigator.pop(context);
   }
 
@@ -185,10 +174,9 @@ class _CadastroState extends State<Cadastro> {
   ------------------------------------------------------------------------------------
 */
 
-
   _tirarFotoCamera() async {
-    final pickedFile =
-        await ImagePicker.platform.pickImage(source: ImageSource.camera);
+    final pickedFile = await ImagePicker.platform
+        .pickImage(source: ImageSource.camera, imageQuality: 40);
     File imagemSelecionada = File(pickedFile.path);
     if (imagemSelecionada != null) {
       setState(() {
@@ -196,7 +184,6 @@ class _CadastroState extends State<Cadastro> {
       });
     }
   }
-
 
 /*------------------------------------------------------------------------------------
 
@@ -206,8 +193,6 @@ class _CadastroState extends State<Cadastro> {
 
   ------------------------------------------------------------------------------------
 */
-
-
 
   _tirarFotoGaleria() async {
     final pickedFile =
@@ -232,10 +217,12 @@ class _CadastroState extends State<Cadastro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: Text(
             "Cadastro",
-            style: GoogleFonts.lato(),),
+            style: GoogleFonts.lato(),
+          ),
         ),
         body: Container(
             color: themeData.primaryColor,
@@ -277,19 +264,19 @@ class _CadastroState extends State<Cadastro> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.camera_alt,color:Colors.white),
+                                      Icon(Icons.camera_alt,
+                                          color: Colors.white),
                                       Center(
                                         child: Padding(
-                                          padding: const EdgeInsets.only(left: 4),
-                                          child: Text(
-                                            "Camera",
-                                            style: GoogleFonts.lato(
-                                              textStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18,
-                                              ),
-                                            )
-                                          ),
+                                          padding:
+                                              const EdgeInsets.only(left: 4),
+                                          child: Text("Camera",
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18,
+                                                ),
+                                              )),
                                         ),
                                       ),
                                     ],
@@ -309,18 +296,19 @@ class _CadastroState extends State<Cadastro> {
                                   padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                                   child: Row(
                                     children: [
-                                      Icon(Icons.insert_photo_rounded,color:Colors.white),
+                                      Icon(Icons.insert_photo_rounded,
+                                          color: Colors.white),
                                       Center(
                                         child: Padding(
-                                          padding: const EdgeInsets.only(left: 4),
+                                          padding:
+                                              const EdgeInsets.only(left: 4),
                                           child: Text(
                                             "Galeria",
                                             style: GoogleFonts.lato(
                                                 textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18,
-                                                )
-                                            ),
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                            )),
                                           ),
                                         ),
                                       ),
@@ -532,7 +520,8 @@ class _CadastroState extends State<Cadastro> {
                                       Container(
                                         child: Text(
                                           "Cliente",
-                                          style: GoogleFonts.lato(),),
+                                          style: GoogleFonts.lato(),
+                                        ),
                                         padding: EdgeInsets.all(8),
                                       ),
                                       FlutterSwitch(
@@ -550,7 +539,8 @@ class _CadastroState extends State<Cadastro> {
                                       Container(
                                         child: Text(
                                           "Técnico",
-                                          style: GoogleFonts.lato(),),
+                                          style: GoogleFonts.lato(),
+                                        ),
                                         padding: EdgeInsets.all(8),
                                       ),
                                     ],
@@ -571,15 +561,14 @@ class _CadastroState extends State<Cadastro> {
                                           padding:
                                               EdgeInsets.fromLTRB(16, 8, 16, 8),
                                           child: Center(
-                                            child: Text(
-                                              "Cadastrar",
-                                              style: GoogleFonts.lato(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold),
-                                              )
-                                            ),
+                                            child: Text("Cadastrar",
+                                                style: GoogleFonts.lato(
+                                                  textStyle: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )),
                                           ),
                                           decoration: BoxDecoration(
                                             gradient: LinearGradient(colors: [
