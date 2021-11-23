@@ -14,8 +14,7 @@ No arquivo Ip.dart coloque o ip da onde está o back-end.
 
 Imagens do Aplicativo:
 
-![img](https://ibb.co/zVYMT25)
-![img](https://ibb.co/DgLc2gc)
-![img](https://ibb.co/3cNPpSQ)
-
-![img](https://ibb.co/2d2892Z)
+<img src="https://ibb.co/zVYMT25"></img>
+<img src="https://ibb.co/DgLc2gc"></img>
+<img src="https://ibb.co/3cNPpSQ"></img>
+<img src="https://ibb.co/2d2892Z"></img>
