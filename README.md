@@ -11,3 +11,11 @@ Este repositório abrange o código realizado para a construção do Aplicativo.
 Para compilar o aplicativo, necessita-se de uma IDE com suporte a Dart/Flutter: Android Studio(com todas atualzações) ou Visual Studio Code(com as devidas extensões) Também é necessário baixar o Dart e Flutter: Dart: https://dart.dev/get-dart / Flutter: https://flutter.dev/docs/get-started/install
 
 No arquivo Ip.dart coloque o ip da onde está o back-end.
+
+Imagens do Aplicativo:
+
+![img](https://ibb.co/zVYMT25)
+![img](https://ibb.co/DgLc2gc)
+![img](https://ibb.co/3cNPpSQ)
+
+![img](https://ibb.co/2d2892Z)
