@@ -14,7 +14,10 @@ No arquivo Ip.dart coloque o ip da onde está o back-end.
 
 Imagens do Aplicativo:
 
-<img src="https://ibb.co/zVYMT25"></img>
-<img src="https://ibb.co/DgLc2gc"></img>
-<img src="https://ibb.co/3cNPpSQ"></img>
-<img src="https://ibb.co/2d2892Z"></img>
+![LOGIN](https://user-images.githubusercontent.com/29990158/143015106-2970ff2f-e4a7-4750-b83e-f030c6a9af0e.jpg)
+![INICIO](https://user-images.githubusercontent.com/29990158/143015127-01681d59-935f-4369-a820-35387a6e8f4d.jpg)
+![CADASTRO_CHAMADO1](https://user-images.githubusercontent.com/29990158/143015151-42fc896f-167f-4275-bb15-2c24f6da7926.jpg)
+![CADASTRO_CHAMADO2](https://user-images.githubusercontent.com/29990158/143015156-da7b685e-1b37-4a89-9915-cba92225c6be.jpg)
+![DETALHE](https://user-images.githubusercontent.com/29990158/143015204-0b0317ab-edde-4a5c-a08c-a8a89dd7a2d6.jpg)
+![DETALHE2](https://user-images.githubusercontent.com/29990158/143015211-fe3778cf-5dd9-4482-9829-81de543ac733.jpg)
+![PESQUISA 1](https://user-images.githubusercontent.com/29990158/143015219-14316d9d-5294-4188-9783-0737efceb4eb.jpg)
